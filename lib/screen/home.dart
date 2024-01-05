@@ -1,13 +1,11 @@
-
-
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/screen/login_page.dart';
+import 'package:travel_app/screen/screenstructur.dart';
 import 'package:travel_app/screen/upcoming.dart';
+import 'package:travel_app/screen/upcominglist.dart';
 
-
-
-
+int sighnindata=check.length-1;
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -15,14 +13,13 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+  class _HomeState extends State<Home> {
   int indexnum=0;
   @override
   Widget build(BuildContext context) {
-    
+  
     return  Scaffold(
-      
-      appBar: AppBar(
+        appBar: AppBar(
         centerTitle: true,
         backgroundColor:const  Color(0xFFCBE7E3),
         title: const Text('Home',style: TextStyle(
@@ -30,71 +27,9 @@ class _HomeState extends State<Home> {
         ),
         ),
         ),
-      drawer: const Drawer(
-        backgroundColor: Color(0xFF05999E ),
-        child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment:CrossAxisAlignment.start,
-            children: [
-            Padding(
-              padding: EdgeInsets.only(top: 25),
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage("assets/WhatsApp Image 2023-10-30 at 21.46.57_24577aca.jpg"),
-              ), 
-            ),
-            SizedBox(height:10,),
-            Text("Jishad.A",style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(height:10 ,),
-            Divider(),
-          
-            Expanded(child: Column(
-              children: [
-                ListTile(
-                  leading: Icon(Icons.home),
-                  title: Text('Home'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.account_circle_outlined),
-                  title: Text("My Account"),
-                ),
-                ListTile(
-                  leading: Icon(Icons.privacy_tip_outlined),
-                  title: Text("Privacy_Policy"),
-                ),
-                ListTile(
-                  leading: Icon(Icons.library_books),
-                  title: Text("Terms&Contitions"),
-                ),
-                ListTile(
-                  leading: Icon(Icons.favorite_border),
-                  title: Text("Favorite"),
-                ),
-                ListTile(
-                  leading: Icon(Icons.logout_rounded),
-                  title: Text("Log Out"),
-                ),
-              
-              ],
-            ))
-          ],),
-        )
-        ),
+      drawer: const drawerscreen(),
       body:Column(
         children: [
-          
-          // Container(
-          //   height:MediaQuery.of(context).size.height * 0.2,
-          //   width:MediaQuery.of(context).size.width,
-          //   decoration:const BoxDecoration(
-          //     image: DecorationImage(
-          //       image: AssetImage('assets/travel3.jpg',),fit: BoxFit.cover
-          //       )
-          //   ),
-          // ), 
-
           CarouselSlider(
           items: [
             SizedBox(
@@ -135,11 +70,8 @@ class _HomeState extends State<Home> {
             viewportFraction: 1,
           ),
         ),
-      
-    
-          Expanded(
-          
-            child:Container(
+     Expanded(
+           child:Container(
               height: MediaQuery.of(context).size.height,
               width:  MediaQuery.of(context).size.width,
               decoration:const BoxDecoration(
@@ -149,8 +81,7 @@ class _HomeState extends State<Home> {
                  begin: Alignment.topCenter,
                  end: Alignment.bottomCenter,
                  ),
-             
-              ),
+             ),
              child: SingleChildScrollView(
                child:LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints){
@@ -169,41 +100,39 @@ class _HomeState extends State<Home> {
                 const  SizedBox(height: 20,),
                  InkWell(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const Upcoming()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>const Upcominglist()));
                   },
                    child: CircleAvatar(
-                    
                     radius: avatarRadius,
                     backgroundImage:const AssetImage('assets/teravel.jpg'),
                    ),
                  ),
                 const  SizedBox(height: 20,),
-                CircleAvatar(
-                  radius:avatarRadius ,
-                  backgroundImage: const AssetImage('assets/travel1.jpg'),
-                 ),
+                InkWell(
+                  onTap: () {
+
+                  },
+                  child: CircleAvatar(
+                    radius:avatarRadius ,
+                    backgroundImage: const AssetImage('assets/travel1.jpg'),
+                   ),
+                ),
                 const  SizedBox(height: 20,),
                   CircleAvatar(
                   radius:avatarRadius,
                   backgroundImage: const AssetImage('assets/travel2.jpg'),
-                                     ) 
+                 ) 
                 ],
                ),
                  );
                 }
-                
-               )
+                )
              ),
             ), 
           )
-            
-         
-              
-          
-        ],
+          ],
       ),
-    
-      bottomNavigationBar: BottomNavigationBar(
+  bottomNavigationBar: BottomNavigationBar(
         items:const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home,color: Color(0xFF05999E)),
@@ -235,27 +164,29 @@ class _HomeState extends State<Home> {
         onTap: (index) {
           setState(() {
             indexnum=index;
-            // switch(index){
-            //   case 0:
-            //   break;
-
-            //   case 1:
-             
-            //   break;
-            //   case 2:
-             
-            //   break;
-            //   case 3:
-            //   break;
-            //   case 4:
-            //   break;
-              
-              
-            // }
-          });
+            navigateToScreen(index);
+         });
         },
         ),
         
     );
   }
+  void navigateToScreen(int index) {
+    switch (index) {
+      case 0:
+        break;
+      case 1:
+       
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  Upcoming()),
+        );
+        break;
+       case 3:
+
+    }
+  }
 }
+

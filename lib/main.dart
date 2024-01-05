@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:travel_app/model/model.dart';
+import 'package:travel_app/model/tripplanmodel.dart';
 import 'package:travel_app/screen/first_page.dart';
 
 
@@ -11,6 +12,7 @@ Future<void> main()async {
      Hive.registerAdapter(LoginmodelAdapter());
   
   }
+    Hive.registerAdapter(PlandetailsAdapter());
  await Hive.openBox<Loginmodel>('login_db');
   runApp(const MyApp());
 }

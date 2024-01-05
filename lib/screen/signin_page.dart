@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/model/model.dart';
+import 'package:travel_app/screen/login_page.dart';
 import '../db_functions.dart';
 
 import 'home.dart';
@@ -19,7 +20,7 @@ class Signin extends StatefulWidget {
   State<Signin> createState() => _SigninState();
 }
 
-class _SigninState extends State<Signin> {
+  class _SigninState extends State<Signin> {
   TextEditingController usernamecontroller=TextEditingController();
   TextEditingController passwordcontroller=TextEditingController();
   TextEditingController confirmpasswordcontroller=TextEditingController();
@@ -65,7 +66,7 @@ class _SigninState extends State<Signin> {
                   )
                ],
                ),
-                 Form(
+               Form(
                   key: validation,
                   child: Column(
                   children: [
@@ -208,14 +209,16 @@ class _SigninState extends State<Signin> {
               ),
                 ),
                   ],
-                )),
+                )
+                )
+                 ,
               const  SizedBox(
                 height: 35,
               ),
                 InkWell(
                   onTap: () {
                   signinchecking();
-                 
+                  getdetails();
                   //  validation.currentState!.validate();
                  
                   },
@@ -251,8 +254,9 @@ class _SigninState extends State<Signin> {
     final phonenumber=phonenumbercontroller.text.trim();
     if(validation.currentState!.validate()&&image1!=null&&password==confirmpassword){
        final sighnin=Loginmodel(username:username, password: password, email: email, phonenumber: phonenumber, image:'');
-       await adddetails(sighnin);
-        
+       await addsignindetails(sighnin);
+       sighnindata=check.length-1;
+      print("sighnindata value is ${check.length}");
        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>const Home()));
        usernamecontroller.clear();
        passwordcontroller.clear();
@@ -284,9 +288,7 @@ class _SigninState extends State<Signin> {
      }
      
   }
-
-
-    Future<void> fromgallery() async {
+   Future<void> fromgallery() async {
     final img1 = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (img1 != null) {
       setState(() {

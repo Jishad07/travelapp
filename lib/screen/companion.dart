@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/screen/upcoming.dart';
 import 'package:travel_app/screen/upcominglist.dart';
 
 class Companion extends StatelessWidget {
@@ -162,49 +163,69 @@ class Companion extends StatelessWidget {
                           child:  Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CircleAvatar(
-                                radius: avatarRadius,
-                                child:  Column(
-                                  children: [
-                                   const Icon(Icons.person,size: 30,),
-                                    SizedBox(height:MediaQuery.of(context).size.height *0.01),
-                                   const Text("Solo")
-                                  ],
+                              InkWell(
+                                onTap: () {
+                                  
+                                },
+                                child: CircleAvatar(
+                                  radius: avatarRadius,
+                                  child:  Column(
+                                    children: [
+                                     const Icon(Icons.person,size: 30,),
+                                      SizedBox(height:MediaQuery.of(context).size.height *0.01),
+                                     const Text("Solo")
+                                    ],
+                                  ),
                                 ),
                               ),
                             SizedBox(width: MediaQuery.of(context).size.width *0.05,),
-                               CircleAvatar(
-                              radius: avatarRadius,
-                               child:  Column(
-                                  children: [
-                                   const Icon(Icons.group,size: 30,),
-                                    SizedBox(height:MediaQuery.of(context).size.height *0.01),
-                                   const Text("Couple")
-                                  ],
-                                ),
-                            ),
-                            SizedBox(width: MediaQuery.of(context).size.width *0.05,),
-                              CircleAvatar(
-                                radius:  avatarRadius,
+                               InkWell(
+                                onTap: () {
+                                  
+                                },
+                                 child: CircleAvatar(
+                                                             radius: avatarRadius,
                                  child:  Column(
-                                  children: [
-                                   const Icon(Icons.family_restroom,size: 30,),
-                                    SizedBox(height:MediaQuery.of(context).size.height *0.01),
-                                   const Text("Family")
-                                  ],
+                                    children: [
+                                     const Icon(Icons.group,size: 30,),
+                                      SizedBox(height:MediaQuery.of(context).size.height *0.01),
+                                     const Text("Couple")
+                                    ],
+                                  ),
+                                                           ),
+                               ),
+                            SizedBox(width: MediaQuery.of(context).size.width *0.05,),
+                              InkWell(
+                                onTap: () {
+                                  
+                                },
+                                child: CircleAvatar(
+                                  radius:  avatarRadius,
+                                   child:  Column(
+                                    children: [
+                                     const Icon(Icons.family_restroom,size: 30,),
+                                      SizedBox(height:MediaQuery.of(context).size.height *0.01),
+                                     const Text("Family")
+                                    ],
+                                  ),
                                 ),
                               ),
                             SizedBox(width: MediaQuery.of(context).size.width *0.05 ,),
-                              CircleAvatar(
-                              radius:  avatarRadius,
-                               child:  Column(
-                                  children: [
-                                   const Icon(Icons.group_add,size: 30,),
-                                    SizedBox(height:MediaQuery.of(context).size.height *0.01),
-                                   const Text("Group")
-                                  ],
-                                ),
-                            )
+                              InkWell(
+                                onTap: () {
+                                  
+                                },
+                                child: CircleAvatar(
+                                radius:  avatarRadius,
+                                 child:  Column(
+                                    children: [
+                                     const Icon(Icons.group_add,size: 30,),
+                                      SizedBox(height:MediaQuery.of(context).size.height *0.01),
+                                     const Text("Group")
+                                    ],
+                                  ),
+                                                          ),
+                              )
                             ],
                           ),
                         );
@@ -226,7 +247,7 @@ class Companion extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextButton(onPressed:(){
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>const Upcominglist()));
+            Navigator.of(context).pop(MaterialPageRoute(builder: (ctx)=>  Upcoming()));
             }, child:const Text("Next",style: TextStyle(
               fontSize: 25,
               

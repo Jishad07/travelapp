@@ -38,7 +38,7 @@ class First_page extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
-                     Navigator. of(context).push(MaterialPageRoute(builder: (ctx)=>const Login()));
+                     Navigator. of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Login()));
                         },
                         child: Container(
                           width: 181,
