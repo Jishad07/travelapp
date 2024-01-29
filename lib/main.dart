@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:travel_app/model/expensemodel.dart';
 import 'package:travel_app/model/model.dart';
 import 'package:travel_app/model/tripplanmodel.dart';
-import 'package:travel_app/screen/first_page.dart';
+import 'package:travel_app/screen/splashpage/splash.dart';
 
 
 Future<void> main()async {
@@ -14,7 +15,12 @@ Future<void> main()async {
   }
     Hive.registerAdapter(PlandetailsAdapter());
  await Hive.openBox<Loginmodel>('login_db');
-  runApp(const MyApp());
+ 
+
+  if(!Hive.isAdapterRegistered(ExpensemodelAdapter().typeId)){
+    Hive.registerAdapter(ExpensemodelAdapter());
+  }
+   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -30,7 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const First_page(),
+      home: const Splashscreen(),
     );
   }
 }

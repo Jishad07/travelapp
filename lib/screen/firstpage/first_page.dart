@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:travel_app/screen/login_page.dart';
-import 'package:travel_app/screen/signin_page.dart';
+import 'package:travel_app/screen/loginpage/login_page.dart';
+import 'package:travel_app/screen/sighninpage/signin_page.dart';
 
 
 class First_page extends StatelessWidget {

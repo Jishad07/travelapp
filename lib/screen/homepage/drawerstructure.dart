@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/screen/home.dart';
-import 'package:travel_app/screen/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:travel_app/screen/firstpage/first_page.dart';
+import 'package:travel_app/screen/homepage/home.dart';
+import 'package:travel_app/screen/loginpage/login_page.dart';
 
 class drawerscreen extends StatelessWidget {
   const drawerscreen({
@@ -54,9 +56,12 @@ class drawerscreen extends StatelessWidget {
                 leading: Icon(Icons.favorite_border),
                 title: Text("Favorite"),
               ),
-            const  ListTile(
-                leading: Icon(Icons.logout_rounded),
-                title: Text("Log Out"),
+              ListTile(
+              onTap: () {
+                logout(context);
+              },
+                leading:const Icon(Icons.logout_rounded),
+                title: const Text("Log Out"),
               ),
             ],
           ))
@@ -64,4 +69,10 @@ class drawerscreen extends StatelessWidget {
       )
       );
   }
+}
+
+Future<void> logout(BuildContext context)async {
+       final sharedpref=await SharedPreferences.getInstance();
+         sharedpref.clear();
+         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const First_page()));
 }

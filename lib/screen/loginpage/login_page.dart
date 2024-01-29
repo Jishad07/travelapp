@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/model/model.dart';
-import 'package:travel_app/screen/home.dart';
-import '../db_functions.dart';
+import 'package:travel_app/screen/homepage/home.dart';
+import '../../db_functions.dart';
 
 List<Loginmodel>check=[]; 
  class Login extends StatefulWidget {
@@ -10,7 +11,7 @@ List<Loginmodel>check=[];
   @override
   State<Login> createState() => _LoginState();
 }
-  
+ const key='Logedin';
 class _LoginState extends State<Login> {
   TextEditingController usernamecontroller=TextEditingController();
   TextEditingController passwordcontroller=TextEditingController();
@@ -138,6 +139,9 @@ class _LoginState extends State<Login> {
       for(int i=0;i<check.length;i++){
         if(check[i].username==loginusername&&check[i].password==loginpassword){
           sighnindata=i;
+           final share=await SharedPreferences.getInstance();
+           share.setBool(key, true);
+           
             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Home()));
          }
          else {
