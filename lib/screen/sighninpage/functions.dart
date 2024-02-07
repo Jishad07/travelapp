@@ -13,7 +13,7 @@ Future<void> signinchecking(context) async{
     final email=emailcontroller.text.trim();
     final phonenumber=phonenumbercontroller.text.trim();
     if(validation.currentState!.validate()&&image1!=null&&password==confirmpassword){
-       final sighnin=Loginmodel(username:username, password: password, email: email, phonenumber: phonenumber, image:'');
+       final sighnin=Loginmodel(username:username, password: password, email: email, phonenumber: phonenumber, image:image!);
        await addsignindetails(sighnin);
        getdetails();
        sighnindata=check.isEmpty?0:check.length-1;

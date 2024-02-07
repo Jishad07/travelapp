@@ -331,35 +331,7 @@ class _CompanionState extends State<Companion> {
                         );
 
                       },itemCount:companions.length,shrinkWrap:true ,)
-                      // SizedBox(height: MediaQuery.of(context).size.height*0.05,), 
-                      // Expanded(
-                      //   child: Column(
-                      //     children: [
-                      //       Visibility(
-                      //         visible: isVisible,
-                      //         child: Container(
-                      //           //  
-                      //           width:double.infinity , 
-                      //           decoration: const BoxDecoration(
-                      //             // color: Colors.amber,
-                      //             ),
-                      //           child: Column(
-                      //             children: [ const Text(
-                      //               "Add Members",
-                      //               style: TextStyle(
-                      //                 fontSize: 20 ,
-                      //               ),
-                      //               ),
-                      //             const  SizedBox(height: 20,
-                      //               ),
-                      //               TextFormField()
-                      //               ],
-                      //               ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // )
+                     
                     ],
                   ),
                 ),

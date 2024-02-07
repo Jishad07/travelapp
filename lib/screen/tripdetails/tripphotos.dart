@@ -1,7 +1,11 @@
 
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:travel_app/db_functions.dart';
+import 'package:travel_app/screen/sighninpage/signin_page.dart';
+
 
 class Tripphotos extends StatefulWidget {
   const Tripphotos({super.key});
@@ -19,32 +23,32 @@ class _TripphotosState extends State<Tripphotos> {
         centerTitle: true,
 
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 500,  
-            width: double.infinity,
-            color: Colors.amber,
-          
-          ),
-          TextButton(onPressed: (){ 
-           addimage();
-          }, child:Text("Add images"))
-        ],
-        
+      body:GridView.builder(
+  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 3,
+    mainAxisSpacing: 2,
+    crossAxisSpacing: 2,
+  ),
+  itemCount: tripimageslist.length,
+  itemBuilder: (context, index) {
+    final data = tripimageslist[index];
+
+   
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: FileImage(File(data.images)),
+
+          fit: BoxFit.cover, 
+        ),
       ),
     );
+  },
+),
+   );
   }
 
-  Future<void>addimage()async{
-    final ImagePicker picker=ImagePicker();
-    XFile? pickedimage=await picker.pickImage(source: ImageSource.gallery);
-    if(pickedimage!=null){
-     setState(() {
-      //  _image = File(pickedImage.path);
-     }); 
-    }
-  }
+ 
 }
 
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:travel_app/db_functions.dart';
 import 'sighninbutton.dart';
 
   File? image1;
@@ -21,6 +22,7 @@ class Signin extends StatefulWidget {
   class _SigninState extends State<Signin> {
   // String phoneNumber;
   // String phoneIsoCode;
+  // String data=user[image];
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -32,6 +34,7 @@ class Signin extends StatefulWidget {
             child:const Image(image: AssetImage('assets/Beach sea ocean coconut.jpeg',),fit: BoxFit.cover,),
           ),
          SingleChildScrollView(
+          
            child: Column(
               children: [
               const  SizedBox(height: 70,),

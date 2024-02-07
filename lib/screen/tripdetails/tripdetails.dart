@@ -1,16 +1,25 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:travel_app/model/tripplanmodel.dart';
+import 'package:travel_app/db_functions.dart';
+import 'package:travel_app/model/tripphotosmodel.dart';
 import 'package:travel_app/screen/ongoing%20page/ongoingpage.dart';
 import 'package:travel_app/screen/tripdetails/expence.dart';
 import 'package:travel_app/screen/tripdetails/tripphotos.dart';
 
 import 'package:travel_app/screen/upcomingpage/upcoming.dart';
 
-class Tripdetails extends StatefulWidget {
-  final Plandetails data;
-  const Tripdetails(this.data, {super.key});
+   
+  File? image1;
+  String? image;
 
+class Tripdetails extends StatefulWidget {
+   var data;
+   var filteredData;
+  Tripdetails( {super.key,required this.data,this.filteredData});
+   
   @override
   State<Tripdetails> createState() => _TripdetailsState();
 }
@@ -136,30 +145,70 @@ class _TripdetailsState extends State<Tripdetails>
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                   height: 80,
-                  child: ListView.builder(
-                    itemBuilder: (c, index) {
-                      if (index < 9) {
-                        return const CircleAvatar(
-                            radius: 50,
-                            backgroundImage: AssetImage("assets/travel.jpg")
-                            // child:Image(image: )
-                            );
-                      } else if (index == 9) {
-                        return TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (ctx) => const Tripphotos()));
-                            },
-                            child: const Text(
-                              "See all",
-                              style:
-                                  TextStyle(color: Colors.blue, fontSize: 18),
-                            ));
-                      }
-                    },
-                    itemCount: 10,
-                    scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      InkWell(
+                      onTap: () {
+                         addtripimages();
+                      },
+                       child: const  CircleAvatar(
+                                 radius: 50, 
+                                 backgroundColor: Colors.white54,
+                                 child: Padding(
+                                   padding: EdgeInsets.only(left: 5,top: 5),
+                                   child: Text("Add Images",style: TextStyle(fontSize: 12 ),),
+                                 ),
+                                ),
+                     ),
+                      Expanded(
+                        child: ListView.builder(
+                          
+                          itemBuilder: (ctx, index) {
+                      
+                            final data=tripimageslist[index];
+                            // if(index==0){
+                            //   return  InkWell(
+                            //     onTap: () {
+                      
+                            //      addtripimages();
+                            //     },
+                            //     child: const CircleAvatar(
+                            //      radius: 50, 
+                            //      backgroundColor: Colors.white54,
+                            //      child: Padding(
+                            //        padding: EdgeInsets.only(left: 5,top: 5),
+                            //        child: Text("Add Images",style: TextStyle(fontSize: 12 ),),
+                            //      ),
+                            //     ),
+                            //   );
+                            // }
+                             if (index < tripimageslist.length-1) {
+                              return  CircleAvatar(
+                                  radius: 50,
+                                  backgroundImage:  FileImage(File(data.images))
+                                  // FileImage(File(data.images))
+                                  // child:Image(image: )
+                                  );
+                            } else if (index==tripimageslist.length-1&&index<=9 ) {
+                              return TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (ctx) => const Tripphotos()));
+                                  },
+                                  child: const Text(
+                                    "See all",
+                                    style:
+                                        TextStyle(color: Colors.blue, fontSize: 18),
+                                  ));
+                            }
+                            return null;
+                          },
+                          itemCount:tripimageslist.length ,
+                          scrollDirection: Axis.horizontal,
+                        ),
+                      ),
+                    ],
                   )),
             ),
             TabBar(
@@ -229,5 +278,42 @@ class _TripdetailsState extends State<Tripdetails>
     Duration difference = date2.difference(date1);
 
     return difference.inDays;
+  }
+  
+   void addtripimages(){
+    showDialog(context: context, builder: (ctx){
+      return AlertDialog(
+        content: const Text("Choose"),
+        actions: [
+          TextButton(onPressed: (){
+            fromcamera();
+          }, child:const Text("Camera")),
+          TextButton(onPressed: (){
+            fromgallery();
+          }, child:const Text("Gallery"))
+        ],
+      );
+    });
+   }
+   Future<void> fromgallery() async {
+    final img1 = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (img1 != null) {
+      setState(() {
+        image1 = File(img1.path);
+        image = image1!.path;
+      });
+     final value= Tripphotosmodel(images:image! );
+       addtripicture(value);
+    }
+  }
+
+  Future <void>fromcamera()async{
+    final img1 = await ImagePicker().pickImage(source: ImageSource.camera);
+    if(img1!=null){
+      setState(() {
+        image1=File(img1.path);
+        image=image1!.path;
+      });
+    }
   }
 }

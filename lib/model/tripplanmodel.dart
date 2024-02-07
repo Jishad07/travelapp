@@ -3,6 +3,7 @@ part 'tripplanmodel.g.dart';
 
 @HiveType(typeId: 2)
 class Plandetails{
+ bool favorite=false;
 @HiveField(0)
 int? id;
 @HiveField(1)
@@ -13,13 +14,21 @@ String startdate;
 String enddate;
 @HiveField(4)
 String expectedamount;
+//  @HiveField(5)
+  // DateTime date; 
+  
+// @HiveField(5)
+// bool favorite;
 
 Plandetails({
+  
   this.id,
   required this.place,
   required this.startdate,
   required this. enddate,
-  required this.expectedamount
+  required this.expectedamount,
+  //  this.date
+  // this.favorite=false
 });
   
 

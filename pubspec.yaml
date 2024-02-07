@@ -43,6 +43,10 @@ dependencies:
   shared_preferences: ^2.2.2
   intl: ^0.19.0
   datetime_picker_formfield_new: ^2.1.0
+  flutter_picker: ^2.1.0
+  maps_launcher: ^2.2.0
+  lottie: ^2.6.0
+  # google_maps_flutter: ^2.5.3
   
 
 dev_dependencies:
@@ -76,6 +80,10 @@ flutter:
     - assets/travel1.jpg
     - assets/travel2.jpg
     - assets/travel.jpg
+    - assets/animation/Animation - 1707293427636.json
+    - assets/animation/Animation - 1707302519132.json
+    - assets/animation/Animation - 1707303256733.json
+    
   
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -89,9 +97,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
+  fonts:
+    - family: Schyler
+      fonts:
+      - asset: assets/fonts/ProtestRiot-Regular.ttf
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
