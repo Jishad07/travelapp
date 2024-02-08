@@ -87,134 +87,104 @@ class _UpcomingState extends State<Upcoming> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                            color: Colors.white,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: TextFormField(
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please Enter Your location ';
-                                } 
-                                else if(!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)){
-                                  return  'Please enter only letters and spaces';
-                                  
-                                }
-                                else{
-                                  return null;
-                                }
-                              },
-                              controller: placecontroller,
-                              decoration: const InputDecoration(
-                                  hintText: 'Where to go?',
-                                  hintStyle: TextStyle(fontSize: 20),
-                                  border: InputBorder.none),
-                            ),
-                          ),
+                        TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Your location ';
+                            } else if (!RegExp(r'^[a-zA-Z\s]+$')
+                                .hasMatch(value)) {
+                              return 'Please enter only letters and spaces';
+                            } else {
+                              return null;
+                            }
+                          },
+                          controller: placecontroller,
+                          decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: 'Where to go?',
+                              hintStyle: TextStyle(fontSize: 20),
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  borderSide: BorderSide(color: Colors.white))),
                         ),
                         SizedBox(
                             height: MediaQuery.of(context).size.height * 0.03),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                            color: Colors.white,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              readOnly: true,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please Add Starting Date';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              onTap: () {
-                                startdate(context);
-                              },
-                              controller: startdatecontroller,
-                              decoration: const InputDecoration(
-                                hintText: 'Starting Date',
-                                icon: Icon(Icons.calendar_month_rounded),
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(fontSize: 20),
-                              ),
-                            ),
-                          ),
+                        TextFormField(
+                          readOnly: true,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Add Starting Date';
+                            } else {
+                              return null;
+                            }
+                          },
+                          onTap: () {
+                            startdate(context);
+                          },
+                          controller: startdatecontroller,
+                          decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              prefixIcon: Icon(Icons.calendar_month_rounded),
+                              hintText: 'Start Date',
+                              hintStyle: TextStyle(fontSize: 20),
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              )),
                         ),
                         SizedBox(
                             height: MediaQuery.of(context).size.height * 0.03),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                            color: Colors.white,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              readOnly: true,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please Add Ending Date';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              onTap: () {
-                                enddate(context);
-                              },
-                              controller: enddatecontroller,
-                              decoration: const InputDecoration(
-                                hintText: 'Ending Date',
-                                icon: Icon(Icons.calendar_month_rounded),
-                                hintStyle: TextStyle(fontSize: 20),
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
+                        TextFormField(
+                          readOnly: true,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Add Ending Date';
+                            } else {
+                              return null;
+                            }
+                          },
+                          onTap: () {
+                            enddate(context);
+                          },
+                          controller: enddatecontroller,
+                          decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              prefixIcon: Icon(Icons.calendar_month_rounded),
+                              hintText: 'Start Date',
+                              hintStyle: TextStyle(fontSize: 20),
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              )),
                         ),
                         SizedBox(
                             height: MediaQuery.of(context).size.height * 0.03),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                            color: Colors.white,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please Enter Expected Amount';
-                                } else if(!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                                   return 'Please Enter Numbers';
-                                }
-                                else{
-                                  return null;
-                                }
-                              },
-                              controller: expectamountcontroller,
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                  hintText: 'Expected Amount',
-                                  icon: Icon(Icons.currency_rupee_sharp),
-                                  hintStyle: TextStyle(fontSize: 20),
-                                  border: InputBorder.none),
-                            ),
-                          ),
+                        TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Expected Amount';
+                            } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                              return 'Please Enter Numbers';
+                            } else {
+                              return null;
+                            }
+                          },
+                          controller: expectamountcontroller,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              prefixIcon: Icon(Icons.currency_rupee_sharp),
+                              hintText: 'Expected Amount',
+                              hintStyle: TextStyle(fontSize: 20),
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              )),
                         ),
                         const SizedBox(height: 20),
                         InkWell(
@@ -266,17 +236,17 @@ class _UpcomingState extends State<Upcoming> {
       initialDate: selectedstartingDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
-       
     );
-    
-     DateTime tomorrow=DateTime.now().add(Duration(days: -1));
-    if (picked != null&&!picked.isBefore(tomorrow)) {
+
+    DateTime tomorrow = DateTime.now().add(Duration(days: -1));
+    if (picked != null && !picked.isBefore(tomorrow)) {
       setState(() {
         selectedstartingDate = picked;
         startdatecontroller.text = dateFormat(selectedstartingDate);
       });
     } else {
-      snackbar("Please select a starting date that is on or after today's date");
+      snackbar(
+          "Please select a starting date that is on or after today's date");
     }
   }
 
@@ -294,11 +264,9 @@ class _UpcomingState extends State<Upcoming> {
         enddatecontroller.text = dateFormat(selectedendingDate);
       });
     } else {
-      if(mounted){
+      if (mounted) {
         snackbar('Ending date cannot be before the starting date');
-   
       }
-      
     }
   }
 
@@ -309,18 +277,20 @@ class _UpcomingState extends State<Upcoming> {
     final expectedamount = expectamountcontroller.text.trim();
     if (globalKeyManager.validation.currentState!.validate()) {
       final tripplan = Plandetails(
+       
           place: place,
           startdate: startingdate,
           enddate: endingdate,
-          expectedamount: expectedamount);
+          expectedamount: expectedamount,
+         );
       await tripplandetails(tripplan);
       if (mounted) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (ctx) => const Home()));
-            placecontroller.clear();
-            startdatecontroller.clear();
-            enddatecontroller.clear();
-            expectamountcontroller.clear();
+        placecontroller.clear();
+        startdatecontroller.clear();
+        enddatecontroller.clear();
+        expectamountcontroller.clear();
       }
     }
   }
@@ -336,7 +306,8 @@ class _UpcomingState extends State<Upcoming> {
           place: place,
           startdate: startingdate,
           enddate: endingdate,
-          expectedamount: expectedamount);
+          expectedamount: expectedamount,
+          number:widget.newvalue!.number );
 
       edittripdetails(widget.newvalue!.id, tripplan);
 
@@ -358,8 +329,10 @@ class _UpcomingState extends State<Upcoming> {
     // Implement your logic to get trip details from the database
   }
 
-  void snackbar( String text){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(text)));
+  void snackbar(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
+
+
+ 
 }

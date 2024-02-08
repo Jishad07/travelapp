@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:travel_app/screen/AboutUs/aboutuspage.dart';
 import 'package:travel_app/screen/favoritepage.dart/favoritepage.dart';
 import 'package:travel_app/screen/firstpage/first_page.dart';
 import 'package:travel_app/screen/homepage/home.dart';
@@ -61,6 +62,13 @@ class Drawerscreen extends StatelessWidget {
                     leading: const Icon(Icons.account_circle_outlined),
                     title: const Text("My Account"),
                   ),
+                   ListTile(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const Favoritepage()));
+                    },
+                    leading: const Icon(Icons.star_border),
+                    title: const Text("Favorite"),
+                  ),
                   ListTile(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -77,12 +85,14 @@ class Drawerscreen extends StatelessWidget {
                     leading: const Icon(Icons.library_books),
                     title: const Text("Terms&Contitions"),
                   ),
-                  ListTile(
+                 
+                   ListTile(
+                    leading: const Icon(Icons.settings_applications),
+                    title: const Text('About Me '),
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const Favoritepage()));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (ctx) => const AboutUsPage()));
                     },
-                    leading: const Icon(Icons.favorite_border),
-                    title: const Text("Favorite"),
                   ),
                   ListTile(
                     onTap: () {

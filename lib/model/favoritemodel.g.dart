@@ -22,13 +22,14 @@ class FavoritemodelAdapter extends TypeAdapter<Favoritemodel> {
       startdate: fields[2] as String,
       enddate: fields[3] as String,
       expectedamount: fields[4] as String,
+      number: fields[5] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Favoritemodel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class FavoritemodelAdapter extends TypeAdapter<Favoritemodel> {
       ..writeByte(3)
       ..write(obj.enddate)
       ..writeByte(4)
-      ..write(obj.expectedamount);
+      ..write(obj.expectedamount)
+      ..writeByte(5)
+      ..write(obj.number);
   }
 
   @override

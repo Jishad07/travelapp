@@ -16,6 +16,8 @@ String startdate;
 String enddate;
 @HiveField(4)
 String expectedamount;
+@HiveField(5)
+int? number;
 
 
   Favoritemodel({
@@ -24,6 +26,7 @@ String expectedamount;
     required this.startdate,
     required this.enddate,
     required this.expectedamount,
+     this.number
    
   });
 } 

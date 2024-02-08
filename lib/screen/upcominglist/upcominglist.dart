@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/favoritemodel.dart';
@@ -18,45 +19,38 @@ class Upcominglist extends StatefulWidget {
 
 List<Plandetails> dbtripplan = [];
 List<Plandetails> dbtripplandb = [];
- 
+
 class _UpcominglistState extends State<Upcominglist> {
   List<bool> isExpandedList = [];
-   List<Plandetails>upcomingTrips=[];
+  List<Plandetails> upcomingTrips = [];
   int indexnum = 0;
   final List<Widget> screens = [
     const Home(),
     const Upcominglist(),
   ];
- 
-
-
 
   @override
   void initState() {
     // TODO: implement initState
 
-
-
-
-   Future.delayed(Duration.zero, () async {
+    Future.delayed(Duration.zero, () async {
       dbtripplan = await gettripdetails();
+
       setState(() {
-          upcomingTrips = filterTripsUpcomings(dbtripplan);
+        upcomingTrips = filterTripsUpcomings(dbtripplan);
       });
-   
-     
+
       if (upcomingTrips.isNotEmpty) {
         upcomingTrips.sort((a, b) => a.startdate.compareTo(b.startdate));
 
         setState(() {
-          isExpandedList = List.generate(upcomingTrips.length, (index) => false);
+          isExpandedList =
+              List.generate(upcomingTrips.length, (index) => false);
         });
       }
     });
     super.initState();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +89,9 @@ class _UpcominglistState extends State<Upcominglist> {
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (ctx) => Tripdetails(data: data,)));
+                                builder: (ctx) => Tripdetails(
+                                      data: data,
+                                    )));
                           },
                           child: Card(
                             color: const Color(0xFF05999E),
@@ -118,40 +114,56 @@ class _UpcominglistState extends State<Upcominglist> {
                                         children: [
                                           IconButton(
                                               onPressed: () {
-                                              
+                                                addfavoritetodb(data, index);
+                                                print(data.id);
+                                                print(data.id);
 
-                                                setState(() {
-                                                  
-                                                });
-                                                setState(() {
-                                                  dbtripplan[index].favorite =
-                                                      !dbtripplan[index]
-                                                          .favorite;
-                                                  if (dbtripplan[index]
-                                                      .favorite) {
-                                                     addfavoritetodb(dbtripplan[index].id,index);
-                                                      }
-                                                      else if(!dbtripplan[index].favorite){
-                                                        print(dbtripplan[index].id);
-                                                     deletefavorite(dbtripplan[index].id);
-                                                      }
-                                                });
+                                                // setState(() {
+                                                //   // Check if dbtripplan[index].id exists in the Hive database
+                                                //   doesIdExist(
+                                                //           dbtripplan[index].id!)
+                                                //       .then((exists) {
+                                                //         print(exists);
+                                                //     if (exists) {
+                                                //       dbtripplan[index].favorite=!dbtripplan[index].favorite;
+                                                //       print('addfavoritetodb value und');
+                                                //     } else {
+                                                //     print("addfavorite db illa");
+                                                //     }
+                                                //   });
+                                                // });
+
+                                                // setState(() {
+                                                //   dbtripplan[index].favorite =
+                                                //       !dbtripplan[index]
+                                                //           .favorite;
+                                                //   if (dbtripplan[index]
+                                                //       .favorite) {
+                                                //     addfavoritetodb(
+                                                //         dbtripplan[index].id,
+                                                //         index);
+                                                //   } else if (!dbtripplan[index]
+                                                //       .favorite) {
+
+                                                //     deletefavorite(
+                                                //         dbtripplan[index].id);
+                                                //   }
+                                                // });
                                               },
                                               icon: Icon(
                                                 Icons.favorite,
                                                 color:
                                                     dbtripplan[index].favorite
-                                                    
                                                         ? Colors.amber
                                                         : Colors.white,
                                               )),
                                           Align(
                                               alignment: Alignment.topRight,
                                               child: PopupMenuButton(
-                                                color: Colors.amber,
+                                                color: Colors.white ,
                                                 elevation: 20,
                                                 icon:
-                                                    const Icon(Icons.more_vert),
+                                                    const Icon(Icons.more_vert,color: Colors.black,),
                                                 onSelected: (value) {
                                                   if (value == 'edit') {
                                                     setState(() {
@@ -162,7 +174,6 @@ class _UpcominglistState extends State<Upcominglist> {
                                                                     newvalue:
                                                                         data,
                                                                   )));
-                              
                                                     });
                                                   } else if (value ==
                                                       'delete') {
@@ -268,7 +279,6 @@ class _UpcominglistState extends State<Upcominglist> {
                                     data.startdate,
                                     style: const TextStyle(fontSize: 16),
                                   ),
-                                if(isExpandedList.length<index)
                                   if (isExpandedList[index])
                                     Column(
                                       crossAxisAlignment:
@@ -364,22 +374,60 @@ class _UpcominglistState extends State<Upcominglist> {
     }
   }
 
-  void addfavoritetodb(
-    id,
-    index,
-  ) async {
-    final add = Favoritemodel(
-  
-        id: id,
-        place: dbtripplan[index].place,
-        startdate: dbtripplan[index].startdate,
-        enddate: dbtripplan[index].enddate,
-        expectedamount: dbtripplan[index].expectedamount);
-        
-    await addfavorites(add);
-  }
+//   void addfavoritetodb(
+//     id,
+//     index,
+//   ) async {
+//       final addfavoriteDb=await Hive.openBox<Favoritemodel>('Dbaddfavorites');
+//     if (!addfavoriteDb.values.any((element) => element.id == id)) {
+//       final add = Favoritemodel(
+//           id: id,
+//           place: dbtripplan[index].place,
+//           startdate: dbtripplan[index].startdate,
+//           enddate: dbtripplan[index].enddate,
+//           expectedamount: dbtripplan[index].expectedamount);
 
-  void deletefavorite(id)async{
-    deletefavoritedb(id);
+//       await addfavorites(add);
+//       setState(() {
+//         dbtripplan[index].favorite = !dbtripplan[index].favorite;
+//       });
+//     } else if (addfavoriteDb.values.any((element) => element.id == id)) {
+//       await deletefavoritedb(id);
+//       print("non favorite ${id}");
+//       setState(() {
+
+//         dbtripplan[index].favorite = !dbtripplan[index].favorite;
+//       });
+//   }
+
+// }
+
+  void addfavoritetodb(data, index) async {
+    final addfavoriteDb = await Hive.openBox<Favoritemodel>('Dbaddfavorites');
+
+    if (!addfavoriteDb.values.any((element) => element.number == data.number)) {
+      final add = Favoritemodel(
+          id: data.id,
+          place: data.place,
+          startdate: data.startdate,
+          enddate: data.enddate,
+          expectedamount: data.expectedamount,
+          number: data.number);
+
+      await addfavorites(add);
+
+      setState(() {
+        dbtripplan[index].favorite = true;
+      });
+    } else {
+      final datas =
+          addfavoriteDb.values.firstWhere((item) => item.number == data.number);
+
+      await deletefavoritedb(datas.id!);
+
+      setState(() {
+        dbtripplan[index].favorite = false;
+      });
+    }
   }
 }

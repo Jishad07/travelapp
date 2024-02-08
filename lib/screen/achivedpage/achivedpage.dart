@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/favoritemodel.dart';
 import 'package:travel_app/model/tripplanmodel.dart';
@@ -116,23 +117,8 @@ class _Achivedpage extends State<Achivedpage> {
                                         children: [
                                           IconButton(
                                               onPressed: () {
-                                                setState(() {});
-                                                setState(() {
-                                                  dbtripplan[index].favorite =
-                                                      !dbtripplan[index]
-                                                          .favorite;
-                                                  if (dbtripplan[index]
-                                                      .favorite) {
-                                                    addfavoritetodb(
-                                                        dbtripplan[index].id,
-                                                        index);
-                                                  } else if (!dbtripplan[index]
-                                                      .favorite) {
-                                                    print(dbtripplan[index].id);
-                                                    deletefavorite(
-                                                        dbtripplan[index].id);
-                                                  }
-                                                });
+                                               addfavoritetodb(data,index);
+                                               
                                               },
                                               icon: Icon(
                                                 Icons.favorite,
@@ -250,21 +236,33 @@ class _Achivedpage extends State<Achivedpage> {
     }
   }
 
-  void addfavoritetodb(
-    id,
-    index,
-  ) async {
-    final add = Favoritemodel(
-        id: id,
-        place: dbtripplan[index].place,
-        startdate: dbtripplan[index].startdate,
-        enddate: dbtripplan[index].enddate,
-        expectedamount: dbtripplan[index].expectedamount);
+ void addfavoritetodb(data,index) async {
+    
+    final addfavoriteDb = await Hive.openBox<Favoritemodel>('Dbaddfavorites');
 
-    await addfavorites(add);
-  }
+    
+    if (!addfavoriteDb.values.any((element) => element.id == data.id)) {
+     
+      final add = Favoritemodel(
+        id: data.id,
+        place: data.place,
+        startdate: data.startdate,
+        enddate:data.enddate,
+        expectedamount: data.expectedamount,
+        number: data.id
+      );
 
-  void deletefavorite(id) async {
-    deletefavoritedb(id);
+      await addfavorites(add);
+
+      setState(() {
+        dbtripplan[index].favorite = true;
+      });
+    } else {
+      await deletefavoritedb(data.id);
+
+      setState(() {
+        dbtripplan[index].favorite = false;
+      });
+    }
   }
 }

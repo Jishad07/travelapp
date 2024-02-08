@@ -42,6 +42,8 @@ Future<void>tripplandetails(Plandetails value)async{
   final tripplandb=await Hive.openBox<Plandetails>('trip_plan_db');
   final _id=await tripplandb.add(value);
   value.id=_id;
+  value.number=_id;
+  await tripplandb.put(_id, value);
   print('mujeeb');
   
 
@@ -107,22 +109,26 @@ Future<List<Plandetails>>gettripdetails()async{
  Future<void>addfavorites(Favoritemodel value)async{
   print('add favorite db okke');
   final addfavoriteDb=await Hive.openBox<Favoritemodel>('Dbaddfavorites');
-  final id =await addfavoriteDb.add(value);
-  addfavoriteDb.put(id, value);
-getallfavorite();
-  print(addfavoritelist[0].place);
-  
+  final id1 =await addfavoriteDb.add(value);
+  value.id=id1;
+  await addfavoriteDb.put(id1, value);
+   await getallfavorite();
+    
  }
+
+
+
+
+
 
  Future<void>deletefavoritedb(int id)async{
   final addfavoriteDb=await Hive.openBox<Favoritemodel>("Dbaddfavorites");
-   addfavoriteDb.delete(id);
-    getallfavorite();
+    await addfavoriteDb.delete(id);
+   await getallfavorite();
 
  }
   Future<void>getallfavorite()async{
- final addfavoriteDb=await Hive.openBox<Favoritemodel>("Dbaddfavorites");
-
+   final  addfavoriteDb=await Hive.openBox<Favoritemodel>("Dbaddfavorites");
     addfavoritelist.clear();
     addfavoritelist=addfavoriteDb.values.toList();
   }

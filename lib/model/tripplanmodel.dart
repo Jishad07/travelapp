@@ -14,6 +14,10 @@ String startdate;
 String enddate;
 @HiveField(4)
 String expectedamount;
+@HiveField(5)
+int? number;
+
+
 //  @HiveField(5)
   // DateTime date; 
   
@@ -27,6 +31,7 @@ Plandetails({
   required this.startdate,
   required this. enddate,
   required this.expectedamount,
+ this.number
   //  this.date
   // this.favorite=false
 });
