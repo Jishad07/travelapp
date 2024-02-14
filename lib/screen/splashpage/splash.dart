@@ -21,10 +21,12 @@ class _SplashscreenState extends State<Splashscreen> {
 
 
   void initState() {
-    getallfavorite();
+    getAllFavorites;
+  
    
    splashchecking();
     super.initState();
+    
   }
   @override
   Widget build(BuildContext context) {
@@ -63,6 +65,8 @@ class _SplashscreenState extends State<Splashscreen> {
     }
 
   }
+  
+  
 
  
 

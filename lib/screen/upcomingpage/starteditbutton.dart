@@ -21,7 +21,7 @@ class Starteditbutton extends StatelessWidget {
     height: MediaQuery.of(context).size.height *0.05,
     width: MediaQuery.of(context).size.width *0.5,
                      
-    child: Center(child: Text(widget.newvalue != null?'Edit':'Start',style:const TextStyle(
+    child: Center(child: Text(widget.newvalue != null?'Edit':'Save',style:const TextStyle(
      fontSize: 20
     ),
     ),

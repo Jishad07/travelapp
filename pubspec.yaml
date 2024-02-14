@@ -46,6 +46,8 @@ dependencies:
   flutter_picker: ^2.1.0
   maps_launcher: ^2.2.0
   lottie: ^2.6.0
+  contacts_service: ^0.6.3
+  permission_handler: ^11.0.1
   # google_maps_flutter: ^2.5.3
   
 

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:travel_app/model/model.dart';
 import 'package:travel_app/screen/achivedpage/achivedpage.dart';
 import 'package:travel_app/screen/loginpage/login_page.dart';
 import 'package:travel_app/screen/homepage/drawerstructure.dart';
@@ -11,7 +12,7 @@ import 'package:travel_app/screen/upcominglist/upcominglist.dart';
 import 'package:travel_app/screen/upcomingpage/upcoming.dart';
 
 int sighnindata = check.isEmpty ? 0 : check.length - 1;
-
+   List<Loginmodel> data=check;
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -194,7 +195,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
       case 4:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (ctx) => const Profilepage()));
+            .push(MaterialPageRoute(builder: (ctx) => const Profilepage(
+                                                                        )));
         break;
     }
   }

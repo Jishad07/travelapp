@@ -6,6 +6,7 @@ import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/favoritemodel.dart';
 import 'package:travel_app/model/tripplanmodel.dart';
 import 'package:travel_app/screen/homepage/home.dart';
+import 'package:travel_app/screen/loginpage/login_page.dart';
 import 'package:travel_app/screen/nowtrippage/nowpage.dart';
 import 'package:travel_app/screen/tripdetails/tripdetails.dart';
 import 'package:travel_app/screen/upcomingpage/upcoming.dart';
@@ -236,29 +237,30 @@ class _Achivedpage extends State<Achivedpage> {
     }
   }
 
- void addfavoritetodb(data,index) async {
-    
+
+    void addfavoritetodb(data, index) async {
     final addfavoriteDb = await Hive.openBox<Favoritemodel>('Dbaddfavorites');
 
-    
-    if (!addfavoriteDb.values.any((element) => element.id == data.id)) {
-     
+    if (!addfavoriteDb.values.any((element) => element.number == data.number)) {
       final add = Favoritemodel(
-        id: data.id,
-        place: data.place,
-        startdate: data.startdate,
-        enddate:data.enddate,
-        expectedamount: data.expectedamount,
-        number: data.id
-      );
+         uniqeusername: check[sighnindata].username,
+          id: data.id,
+          place: data.place,
+          startdate: data.startdate,
+          enddate: data.enddate,
+          expectedamount: data.expectedamount,
+          number: data.number);
 
-      await addfavorites(add);
+      await addFavorite(add,check[sighnindata].username);
 
       setState(() {
         dbtripplan[index].favorite = true;
       });
     } else {
-      await deletefavoritedb(data.id);
+      final datas =
+          addfavoriteDb.values.firstWhere((item) => item.number == data.number);
+
+      await deleteFavorite(datas.id!,check[sighnindata].username);
 
       setState(() {
         dbtripplan[index].favorite = false;

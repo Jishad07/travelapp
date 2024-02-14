@@ -1,50 +1,41 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'favoritemodel.dart';
+part of 'companionmodel.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class FavoritemodelAdapter extends TypeAdapter<Favoritemodel> {
+class CompanionModelAdapter extends TypeAdapter<CompanionModel> {
   @override
-  final int typeId = 5;
+  final int typeId = 6;
 
   @override
-  Favoritemodel read(BinaryReader reader) {
+  CompanionModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Favoritemodel(
+    return CompanionModel(
       id: fields[0] as int?,
-      place: fields[1] as String,
-      startdate: fields[2] as String,
-      enddate: fields[3] as String,
-      expectedamount: fields[4] as String,
-      uniqeusername: fields[6] as String,
-      number: fields[5] as int?,
+      name: fields[1] as String,
+      phonenumber: fields[2] as String,
+      tripid: fields[3] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Favoritemodel obj) {
+  void write(BinaryWriter writer, CompanionModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.place)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.startdate)
+      ..write(obj.phonenumber)
       ..writeByte(3)
-      ..write(obj.enddate)
-      ..writeByte(4)
-      ..write(obj.expectedamount)
-      ..writeByte(5)
-      ..write(obj.number)
-      ..writeByte(6)
-      ..write(obj.uniqeusername);
+      ..write(obj.tripid);
   }
 
   @override
@@ -53,7 +44,7 @@ class FavoritemodelAdapter extends TypeAdapter<Favoritemodel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FavoritemodelAdapter &&
+      other is CompanionModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

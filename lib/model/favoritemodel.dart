@@ -19,6 +19,9 @@ String expectedamount;
 @HiveField(5)
 int? number;
 
+@HiveField(6)
+String uniqeusername;
+
 
   Favoritemodel({
     required this.id,
@@ -26,6 +29,7 @@ int? number;
     required this.startdate,
     required this.enddate,
     required this.expectedamount,
+    required this.uniqeusername,
      this.number
    
   });

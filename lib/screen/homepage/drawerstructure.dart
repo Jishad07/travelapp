@@ -112,8 +112,9 @@ class Drawerscreen extends StatelessWidget {
 Future<void> logout(BuildContext context) async {
   final sharedpref = await SharedPreferences.getInstance();
   sharedpref.clear();
-  Navigator.of(context)
-      .pushReplacement(MaterialPageRoute(builder: (ctx) => const First_page()));
+  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=>First_page()), (route) => false);
+  // Navigator.of(context)
+  //     .pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) => const First_page()));
 }
 
 

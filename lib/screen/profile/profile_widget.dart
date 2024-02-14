@@ -44,25 +44,25 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     );
   }
 
-  void arrow(String content, String hinttext, context) {
-    showDialog(
-        context: context,
-        builder: (ctx) {
-          return AlertDialog(
-            title: Text(content),
-            // content: Text(content),
-            actions: [
-              TextField(
-                controller: TextEditingController(),
-                decoration: InputDecoration(hintText: hinttext),
-              ),
-              TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Ok",
-                  ))
-            ],
-          );
-        });
-  }
+  // void arrow(String content, String hinttext, context) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (ctx) {
+  //         return AlertDialog(
+  //           title: Text(content),
+  //           // content: Text(content),
+  //           actions: [
+  //             TextField(
+  //               controller: TextEditingController(),
+  //               decoration: InputDecoration(hintText: hinttext),
+  //             ),
+  //             TextButton(
+  //                 onPressed: () {},
+  //                 child: const Text(
+  //                   "Ok",
+  //                 ))
+  //           ],
+  //         );
+  //       });
+  // }
 }

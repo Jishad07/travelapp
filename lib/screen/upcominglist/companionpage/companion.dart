@@ -1,15 +1,22 @@
+
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:travel_app/model/companionmodel.dart';
 import 'package:travel_app/screen/upcomingpage/upcoming.dart';
 
 class Companion extends StatefulWidget {
-  const Companion({Key? key}) : super(key: key);
-
+   Companion({Key? key,this.didpressnext}) : super(key: key);
+  Function(List<CompanionModel>,String)? didpressnext;
   @override
   State<Companion> createState() => _CompanionState();
 }
 
 class _CompanionState extends State<Companion> {
+  // Contact? pickedContact;
+  List<Contact> pickedContactsList = [];
   String type='solo';
   List<String> companions=[];
   TextEditingController namecontroller=TextEditingController();
@@ -313,24 +320,26 @@ class _CompanionState extends State<Companion> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           ElevatedButton(onPressed: (){
-                               didpressadd('Add', "Please add new $type", type);
+                            addcontact();
+                              //  didpressadd('Add', "Please add new $type", type);
                           }, child:Text("+ Add your $type")),
                         ],
                       ),
                        if(type!='solo')
                       ListView.builder(itemBuilder: (c,i){
-                        return Row(
-                          children: [
-                            Expanded(child: Text(companions[i])),
-                            IconButton(onPressed: (){
-                              setState(() {
-                                companions.removeAt(i); 
-                              });
-                            }, icon:const Icon(Icons.delete))
-                          ],
+                        return 
+                         ListTile(
+                          title:  Text(pickedContactsList[i].displayName??""),
+                          subtitle:  Text(pickedContactsList[i].phones?.first.value??""),
+                          trailing: IconButton(onPressed: (){
+                           setState(() {
+                             pickedContactsList.removeAt(i);
+                           });
+                          }, icon:const Icon(Icons.delete)),
                         );
+                        
 
-                      },itemCount:companions.length,shrinkWrap:true ,)
+                      },itemCount:pickedContactsList.length,shrinkWrap:true ,)
                      
                     ],
                   ),
@@ -343,7 +352,9 @@ class _CompanionState extends State<Companion> {
             children: [
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(MaterialPageRoute(builder: (ctx) => Upcoming()));
+
+                  savecompanion();
+                 
                 },
                 child: const Text(
                   "Next",
@@ -359,41 +370,71 @@ class _CompanionState extends State<Companion> {
       ),
     );
   }
-  void didpressadd(String title,String content,String hintname) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
+ 
+ Future<void>addcontact()async{
+PermissionStatus permissionStatus=await Permission.contacts.request();
+if(permissionStatus.isGranted){
 
-        title: Text(title),
-        content:  Text(content),
-        actions: [
-          TextFormField(
-            controller: namecontroller,
-            decoration:  InputDecoration(hintText: hintname,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(onPressed: (){
-                 Navigator.of(context).pop();        
-              }, child:const Text("Cancel")),
-              TextButton(onPressed: () {
-                String name =namecontroller.text;
-                if(name.isNotEmpty){
-                  setState(() {
-                    companions.add(name);
-                  });
-                  namecontroller.text='';
-                  Navigator.of(context).pop();
-                }
-              }, child: const Text('Save')),
-            ],
-          )
-        ],
-      );
-    },
-  );
+  final Contact=await ContactsService.openDeviceContactPicker();
+  if(Contact!=null){
+    setState(() {
+      pickedContactsList.add(Contact);
+    });
+  }else{
+  
+  }
 }
+ }
+
+void savecompanion(){
+  List<CompanionModel>companionlist=[];
+for(int i=0;i<pickedContactsList.length;i++){
+  
+  companionlist.add(CompanionModel(id:null, name:pickedContactsList[i].displayName??"", phonenumber: pickedContactsList[i].phones?.first.value??"",tripid: 0));
+
+}
+if(widget.didpressnext!=null){
+widget.didpressnext!(companionlist,type);
+ Navigator.of(context).pop(MaterialPageRoute(builder: (ctx) => Upcoming()));
+}
+
+}
+
+  // void didpressadd(String title,String content,String hintname) {
+  // showDialog(
+  //   context: context,
+  //   builder: (context) {
+  //     return AlertDialog(
+
+  //       title: Text(title),
+  //       content:  Text(content),
+  //       actions: [
+  //         TextFormField(
+  //           controller: namecontroller,
+  //           decoration:  InputDecoration(hintText: hintname,
+  //           ),
+  //         ),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.end,
+  //           children: [
+  //             TextButton(onPressed: (){
+  //                Navigator.of(context).pop();        
+  //             }, child:const Text("Cancel")),
+  //             TextButton(onPressed: () {
+  //               String name =namecontroller.text;
+  //               if(name.isNotEmpty){
+  //                 setState(() {
+  //                   companions.add(name);
+  //                 });
+  //                 namecontroller.text='';
+  //                 Navigator.of(context).pop();
+  //               }
+  //             }, child: const Text('Save')),
+  //           ],
+  //         )
+  //       ],
+  //     );
+  //   },
+  // );
+// }
 }

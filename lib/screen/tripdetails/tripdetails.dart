@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_app/db_functions.dart';
+import 'package:travel_app/model/companionmodel.dart';
 import 'package:travel_app/model/tripphotosmodel.dart';
 import 'package:travel_app/screen/ongoing%20page/ongoingpage.dart';
 import 'package:travel_app/screen/tripdetails/expence.dart';
 import 'package:travel_app/screen/tripdetails/tripphotos.dart';
+import 'package:travel_app/screen/upcominglist/companionpage/companion.dart';
 
 import 'package:travel_app/screen/upcomingpage/upcoming.dart';
 
@@ -35,9 +37,21 @@ class _TripdetailsState extends State<Tripdetails>
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
+
+    getcompanion();
+  print('hsbhdbchdhc');
+    
     super.initState();
   }
-
+  List<CompanionModel>companionlist=[];
+   void getcompanion()async{
+   List<CompanionModel>tripcompanios = await gettripcompanion(widget.data.id);
+   print("fetched${tripcompanios}");
+   setState(() {
+     companionlist=tripcompanios;
+  
+   });
+   }
   @override
   Widget build(BuildContext context) {
     // String days = 'currentday';
@@ -92,7 +106,7 @@ class _TripdetailsState extends State<Tripdetails>
                               "Expected Amount : ${widget.data.expectedamount}",
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
-                          const Text("Companion  :",
+                           Text("Companion  :    ${widget.data.triptype??"Solo"}",
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold))
                         ],
@@ -113,11 +127,11 @@ class _TripdetailsState extends State<Tripdetails>
                       DateTime today = DateTime.now();
                       int todayIndex =
                           (today.difference(startDate).inDays) % daylength;
-
+            
                       return InkWell(
                         onTap: () {
                           setState(() {
-                            print(todayIndex);
+                           
                           });
                         },
                         child: Container(
@@ -149,7 +163,8 @@ class _TripdetailsState extends State<Tripdetails>
                     children: [
                       InkWell(
                       onTap: () {
-                         addtripimages();
+                        //  addtripimages();
+                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const GalleryAlert()));
                       },
                        child: const  CircleAvatar(
                                  radius: 50, 
@@ -166,22 +181,7 @@ class _TripdetailsState extends State<Tripdetails>
                           itemBuilder: (ctx, index) {
                       
                             final data=tripimageslist[index];
-                            // if(index==0){
-                            //   return  InkWell(
-                            //     onTap: () {
-                      
-                            //      addtripimages();
-                            //     },
-                            //     child: const CircleAvatar(
-                            //      radius: 50, 
-                            //      backgroundColor: Colors.white54,
-                            //      child: Padding(
-                            //        padding: EdgeInsets.only(left: 5,top: 5),
-                            //        child: Text("Add Images",style: TextStyle(fontSize: 12 ),),
-                            //      ),
-                            //     ),
-                            //   );
-                            // }
+                          
                              if (index < tripimageslist.length-1) {
                               return  CircleAvatar(
                                   radius: 50,
@@ -279,23 +279,44 @@ class _TripdetailsState extends State<Tripdetails>
 
     return difference.inDays;
   }
-  
-   void addtripimages(){
-    showDialog(context: context, builder: (ctx){
-      return AlertDialog(
+
+    }
+class GalleryAlert extends StatefulWidget {
+  const GalleryAlert({super.key});
+
+  @override
+  State<GalleryAlert> createState() => _GalleryAlertState();
+}
+
+class _GalleryAlertState extends State<GalleryAlert> {
+  @override
+  Widget build(BuildContext context) {
+    return  AlertDialog(
         content: const Text("Choose"),
         actions: [
           TextButton(onPressed: (){
             fromcamera();
+             Navigator.of(context).pop();
           }, child:const Text("Camera")),
           TextButton(onPressed: (){
             fromgallery();
+            Navigator.of(context).pop();
           }, child:const Text("Gallery"))
         ],
       );
-    });
-   }
-   Future<void> fromgallery() async {
+  }
+    Future <void>fromcamera()async{
+    final img1 = await ImagePicker().pickImage(source: ImageSource.camera);
+    if(img1!=null){
+      setState(() {
+        image1=File(img1.path);
+        image=image1!.path;
+        
+      });
+    }
+  }
+
+    Future<void> fromgallery() async {
     final img1 = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (img1 != null) {
       setState(() {
@@ -304,16 +325,7 @@ class _TripdetailsState extends State<Tripdetails>
       });
      final value= Tripphotosmodel(images:image! );
        addtripicture(value);
-    }
-  }
-
-  Future <void>fromcamera()async{
-    final img1 = await ImagePicker().pickImage(source: ImageSource.camera);
-    if(img1!=null){
-      setState(() {
-        image1=File(img1.path);
-        image=image1!.path;
-      });
+       
     }
   }
 }

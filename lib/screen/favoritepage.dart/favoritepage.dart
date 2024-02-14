@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/favoritemodel.dart';
 import 'package:travel_app/screen/homepage/home.dart';
+import 'package:travel_app/screen/loginpage/login_page.dart';
 import 'package:travel_app/screen/tripdetails/tripdetails.dart';
-import 'package:travel_app/screen/upcominglist/upcominglist.dart';
-import 'package:travel_app/screen/upcomingpage/upcoming.dart';
+
+
 
 class Favoritepage extends StatefulWidget {
   const Favoritepage({super.key});
@@ -17,9 +18,13 @@ List<Favoritemodel> favoritedata = [];
 List<bool> isExpandedList = [];
 
 class _FavoritepageState extends State<Favoritepage> {
+  
   @override
+
   void initState() {
-    List favoritedata = addfavoritelist;
+      String userId = check[sighnindata].username; // Implement this according to your authentication system
+     getAllFavorites(userId);
+    // List favoritedata = addfavoritelist;
 
     super.initState();
   }

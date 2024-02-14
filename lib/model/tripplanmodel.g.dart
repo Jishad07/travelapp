@@ -22,14 +22,16 @@ class PlandetailsAdapter extends TypeAdapter<Plandetails> {
       startdate: fields[2] as String,
       enddate: fields[3] as String,
       expectedamount: fields[4] as String,
+      uniqeusername: fields[6] as String,
       number: fields[5] as int?,
-    );
+      triptype: fields[7] as String?,
+    )..favorite = fields[8] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Plandetails obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +43,13 @@ class PlandetailsAdapter extends TypeAdapter<Plandetails> {
       ..writeByte(4)
       ..write(obj.expectedamount)
       ..writeByte(5)
-      ..write(obj.number);
+      ..write(obj.number)
+      ..writeByte(6)
+      ..write(obj.uniqeusername)
+      ..writeByte(7)
+      ..write(obj.triptype)
+      ..writeByte(8)
+      ..write(obj.favorite);
   }
 
   @override

@@ -1,13 +1,19 @@
 
 
 
+
+
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_app/model/companionmodel.dart';
 import 'package:travel_app/model/expensemodel.dart';
 import 'package:travel_app/model/favoritemodel.dart';
 import 'package:travel_app/model/tripphotosmodel.dart';
 import 'package:travel_app/model/tripplanmodel.dart';
+import 'package:travel_app/screen/homepage/home.dart';
 import 'package:travel_app/screen/loginpage/login_page.dart';
+
 
 import 'model/model.dart';
  
@@ -19,43 +25,113 @@ import 'model/model.dart';
  List addfavoritelist=[];
  List nowtrip=[];
 // List<Expensemodel>sortlist=[];
+
+
  //sighnin details add to database 
-Future<void> addsignindetails(Loginmodel value) async {
+// Future<void> addsignindetails(Loginmodel value) async {
+//   final loginDb = await Hive.openBox<Loginmodel>('login_db');
+
+
+//   bool isUsernameUnique = !loginDb.values.any((element) => element.username == usernamecontroller.text.trim());
+
+//   if (isUsernameUnique) {
+//     final _id = await loginDb.add(value); // await for the completion of the add method
+//     value.id = _id;
+//     loginDb.put(_id, value);
+//     check = loginDb.values.toList();
+//     getdetails();
+//   } else {
+//     print('Username is not unique');
+//   }
+// }
+ 
+ Future<void> addsignindetails(Loginmodel value,context) async {
   final loginDb = await Hive.openBox<Loginmodel>('login_db');
-  final _id = await loginDb.add(value); // await for the completion of the add method
-  value.id = _id;
-  loginDb.put(_id, value);
-  user=loginDb.values.toList();
-  getdetails();
-  print(user[0].username);
+
+  // String username = value.username.trim();
+  //    bool isUsernameUnique = !loginDb.values.any((element) => element.username == username);
+
+  // if (isUsernameUnique) {
+
+    final _id = await loginDb.add(value); // await for the completion of the add method
+    value.id = _id;
+    loginDb.put(_id, value);
+    check = loginDb.values.toList();
+    getdetails();
+  // }
+
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(
+  //       content: Text('Registration successful'),
+  //       duration: Duration(seconds: 2),
+  //       behavior: SnackBarBehavior.floating,
+  //       backgroundColor: Colors.green,
+  //       margin: EdgeInsets.only(left: 8, right: 8, bottom: 35),
+  //     ),
+  //   );
+  // } else {
+    
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(
+  //       content: Text('Username already exists. Please choose a different one.'),
+  //       duration: Duration(seconds: 2),
+  //       behavior: SnackBarBehavior.floating,
+  //       backgroundColor: Colors.red,
+  //       margin: EdgeInsets.only(left: 8, right: 8, bottom: 35),
+  //     ),
+  //   );
+  // }
+
 }
+
+
 
 //get sighnindetails
 Future<void>getdetails()async{
      final box=await Hive.openBox<Loginmodel>('login_db');
-     check.clear();
-     check=box.values.toList();
+      check.clear();
+      check=  box.values.toList();
      }
 
+  
+
+      
+
 //add tripplan details
-Future<void>tripplandetails(Plandetails value)async{
+Future<int>tripplandetails(Plandetails value)async{
   final tripplandb=await Hive.openBox<Plandetails>('trip_plan_db');
   final _id=await tripplandb.add(value);
   value.id=_id;
   value.number=_id;
   await tripplandb.put(_id, value);
-  print('mujeeb');
+  return _id;
   
 
+}
+
+    //  edit Sughnindatails
+Future<void>EditSignindetails(id,editvalue)async{
+     final loginDb = await Hive.openBox<Loginmodel>('login_db');
+    await loginDb.put(id,editvalue);
+   
+    getdetails();
 }
    
 
 
 
 //get tripplan details
-Future<List<Plandetails>>gettripdetails()async{
+Future<List<Plandetails>> gettripdetails()async{
   final box=await Hive.openBox<Plandetails>('trip_plan_db');
-   return box.values.toList();
+  String loggedInUsername = check[sighnindata].username;
+    List<Plandetails> filteredTripDetails = box.values.where((trip) {
+      print("get trip details fav=${trip.favorite}");
+      return trip.uniqeusername == loggedInUsername;
+
+    }).toList();
+      // return box.values.toList();
+    
+      return  filteredTripDetails;
     //  dbtripplan.clear();
     //  dbtripplan= box.values.toList();
    }
@@ -72,7 +148,7 @@ Future<List<Plandetails>>gettripdetails()async{
   Future<void>edittripdetails(id,editvalue)async{
     final box=await Hive.openBox<Plandetails>('trip_plan_db');
        await box.put(id,editvalue);
-
+         
        gettripdetails();
      
   }
@@ -106,32 +182,76 @@ Future<List<Plandetails>>gettripdetails()async{
   print(tripimageslist[0]);
  }
 
- Future<void>addfavorites(Favoritemodel value)async{
+// Modify your database function to associate favorites with users
+Future<void> addFavorite(Favoritemodel value, String userId) async {
   print('add favorite db okke');
-  final addfavoriteDb=await Hive.openBox<Favoritemodel>('Dbaddfavorites');
-  final id1 =await addfavoriteDb.add(value);
-  value.id=id1;
+  final addfavoriteDb = await Hive.openBox<Favoritemodel>('Dbaddfavorites');
+  final id1 = await addfavoriteDb.add(value);
+  value.id = id1;
+  value.uniqeusername = userId; // Assign the user ID to the favorite item
   await addfavoriteDb.put(id1, value);
-   await getallfavorite();
-    
- }
+  await getAllFavorites(userId); // Pass userId to fetch user-specific favorites
+}
 
+Future<void> deleteFavorite(int id, String userId) async {
+  final addfavoriteDb = await Hive.openBox<Favoritemodel>("Dbaddfavorites");
+  await addfavoriteDb.delete(id);
+  await getAllFavorites(userId); // Pass userId to fetch user-specific favorites
+}
 
+Future<void> getAllFavorites(String userId) async {
+  final tripplandb=await Hive.openBox<Plandetails>('trip_plan_db');
+  // final addfavoriteDb = await Hive.openBox<Favoritemodel>("Dbaddfavorites");
+  List<Plandetails> filteredFavorites = tripplandb.values.where((trip) => trip.uniqeusername == userId&&trip.favorite).toList();
+  addfavoritelist = filteredFavorites;
+}
 
-
-
-
- Future<void>deletefavoritedb(int id)async{
-  final addfavoriteDb=await Hive.openBox<Favoritemodel>("Dbaddfavorites");
-    await addfavoriteDb.delete(id);
-   await getallfavorite();
-
- }
-  Future<void>getallfavorite()async{
-   final  addfavoriteDb=await Hive.openBox<Favoritemodel>("Dbaddfavorites");
-    addfavoritelist.clear();
-    addfavoritelist=addfavoriteDb.values.toList();
+Future<void>addcompanions(CompanionModel value)async{
+  final addcompanionDb=await Hive.openBox<CompanionModel>('companionDb'); 
+   final _id=await addcompanionDb.add(value);
+  value.id=_id;
+  await addcompanionDb.put(_id, value);
   }
+
+  Future<List<CompanionModel>>gettripcompanion(int tripid)async{
+    final addcompanionDb=await Hive.openBox<CompanionModel>('companionDb'); 
+   final Listitem=await addcompanionDb.values.toList();
+   final filterdlist=Listitem.where((element) => element.tripid==tripid).toList();
+   return filterdlist;
+   
+
+  }
+
+
+//  Future<void>addfavorites(Favoritemodel value)async{
+//   print('add favorite db okke');
+//   final addfavoriteDb=await Hive.openBox<Favoritemodel>('Dbaddfavorites');
+//  final id1 =await addfavoriteDb.add(value);
+//   value.id=id1;
+//     await addfavoriteDb.put(id1, value);
+//      await getallfavorite();
+
+//   //  return filteredfavorites;
+//   }
+
+
+
+
+
+
+//  Future<void>deletefavoritedb(int id)async{
+//   final addfavoriteDb=await Hive.openBox<Favoritemodel>("Dbaddfavorites");
+//     await addfavoriteDb.delete(id);
+//    await getallfavorite();
+
+//  }
+//   Future<void>getallfavorite()async{
+//    final  addfavoriteDb=await Hive.openBox<Favoritemodel>("Dbaddfavorites");
+//      String faveritedInUsername = check[sighnindata].username;
+//    List<Favoritemodel> filteredfavorites =addfavoriteDb.values.where((trip) => trip.uniqeusername == faveritedInUsername).toList();
+//     addfavoritelist.clear();
+//     addfavoritelist=filteredfavorites;
+//   }
 
  
 
@@ -186,6 +306,7 @@ List<Plandetails> filterTripsUpcomings(List<Plandetails> trips) {
 
   return todayTrips;
 }
+
 
 
 

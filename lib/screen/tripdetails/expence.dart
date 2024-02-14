@@ -44,90 +44,92 @@ class _ExpenceState extends State<Expence> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
+      height: MediaQuery.of(context).size.height/2.8,
         decoration: const BoxDecoration(
             gradient:
                 LinearGradient(colors: [Color(0xFF05999E), Color(0xFFCBE7E3)])),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.width * 0.4,
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: Card(
-                  shadowColor: Colors.amber,
-                  elevation: 10,
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        gradient: const LinearGradient(
-                            colors: [Colors.amber, Colors.pink],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter)),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const Expensedetails()));
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Tottal Expence",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Center(
-                              child: ExpenseText(
-                            newvalue: newValue,
-                          )),
-                        ],
+            SizedBox(
+              height: MediaQuery.of(context).size.width /5,
+             ),
+               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Card(
+                    shadowColor: Colors.amber,
+                    elevation: 10,
+                    color: Colors.transparent,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width/2.5,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: const LinearGradient(
+                              colors: [Colors.amber, Colors.pink],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter)),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const Expensedetails()));
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Total Expence",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Center(
+                                child: ExpenseText(
+                              newvalue: newValue,
+                            )),
+                          ],
+                        ),
                       ),
+                    ),
+                  ),
+                  Card(
+                shadowColor: Colors.amber,
+                elevation: 10,
+                color: Colors.transparent,
+                child: Container(
+                  width: MediaQuery.of(context).size.width/2.5, 
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      gradient: const LinearGradient(
+                          colors: [Color(0xFF05999E),Color.fromARGB(255, 196, 164, 70)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter)),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (ctx) => const Expensedetails()));
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Balance Amount",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Center(
+                            child:BalanceText(
+                          expectedamount:widget.expectedamount,
+                          balanceValue: balanceValue,
+                          
+                        )),
+                      ],
                     ),
                   ),
                 ),
               ),
-            ),
+                ],
+              ),
+            
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.width * 0.4,
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: Card(
-                  shadowColor: Colors.amber,
-                  elevation: 10,
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        gradient: const LinearGradient(
-                            colors: [Color(0xFF05999E),Color.fromARGB(255, 196, 164, 70)],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter)),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const Expensedetails()));
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Balance Amount",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Center(
-                              child:BalanceText(
-                            expectedamount:widget.expectedamount,
-                            balanceValue: balanceValue,
-                            
-                          )),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+             
             ),
             // ListView.separated(
             //   physics: const NeverScrollableScrollPhysics(),
@@ -149,9 +151,9 @@ class _ExpenceState extends State<Expence> {
             //   itemCount: dbexpense.length,
             //   shrinkWrap: true,
             // ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.09,
-            ),
+            // SizedBox(
+            // height: MediaQuery.of(context).size.height * 0.09,
+            // ),
             FloatingActionButton(
               elevation: 20,
               splashColor: Colors.pink,
@@ -159,86 +161,88 @@ class _ExpenceState extends State<Expence> {
                 await showDialog(
                   context: (context),
                   builder: (context) {
-                    return AlertDialog(
-                      elevation: 20,
-                      shadowColor: Colors.white,
-                      title: const Text('Creat Expense'),
-                      content: const Text("Please Add Your Expense"),
-                      actions: [
-                        Form(
-                          key: validation,
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Add Date';
-                                  } else {
+                    return SingleChildScrollView(
+                      child: AlertDialog(
+                        elevation: 20,
+                        shadowColor: Colors.white,
+                        title: const Text('Creat Expense'),
+                        content: const Text("Please Add Your Expense"),
+                        actions: [
+                          Form(
+                            key: validation,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please Add Date';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  onTap: () {
+                                    startdate(context);
+                                  },
+                                  controller: datecontroller,
+                                  decoration:
+                                      const InputDecoration(hintText: 'Date'),
+                                ),
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please Add Time';
+                                    }
                                     return null;
-                                  }
-                                },
-                                onTap: () {
-                                  startdate(context);
-                                },
-                                controller: datecontroller,
-                                decoration:
-                                    const InputDecoration(hintText: 'Date'),
-                              ),
-                              TextFormField(
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Add Time';
-                                  }
-                                  return null;
-                                },
-                                onTap: () {
-                                  time();
-                                },
-                                controller: timecontroller,
-                                decoration:
-                                    const InputDecoration(hintText: 'Time'),
-                              ),
-                              TextFormField(
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Add Category';
-                                  }
-                                  return null;
-                                },
-                                controller: categorycontroller,
-                                decoration:
-                                    const InputDecoration(hintText: 'category'),
-                              ),
-                              TextFormField(
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Add Amount';
-                                  }
-                                  return null;
-                                },
-                                controller: amountcontroller,
-                                decoration:
-                                    const InputDecoration(hintText: 'Amount'),
-                              ),
-                            ],
+                                  },
+                                  onTap: () {
+                                    time();
+                                  },
+                                  controller: timecontroller,
+                                  decoration:
+                                      const InputDecoration(hintText: 'Time'),
+                                ),
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please Add Category';
+                                    }
+                                    return null;
+                                  },
+                                  controller: categorycontroller,
+                                  decoration:
+                                      const InputDecoration(hintText: 'category'),
+                                ),
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please Add Amount';
+                                    }
+                                    return null;
+                                  },
+                                  controller: amountcontroller,
+                                  decoration:
+                                      const InputDecoration(hintText: 'Amount'),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text("Cancel")),
-                            TextButton(
-                                onPressed: () {
-                                  expensechecking();
-                                },
-                                child: const Text('Add'))
-                          ],
-                        )
-                      ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Cancel")),
+                              TextButton(
+                                  onPressed: () {
+                                    expensechecking();
+                                  },
+                                  child: const Text('Add'))
+                            ],
+                          )
+                        ],
+                      ),
                     );
                   },
                 );

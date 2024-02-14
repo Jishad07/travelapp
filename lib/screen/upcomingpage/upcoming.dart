@@ -1,8 +1,13 @@
+
+
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_app/db_functions.dart';
+import 'package:travel_app/model/companionmodel.dart';
 import 'package:travel_app/model/tripplanmodel.dart';
 import 'package:travel_app/screen/homepage/drawerstructure.dart';
+import 'package:travel_app/screen/loginpage/login_page.dart';
 import 'package:travel_app/screen/upcominglist/companionpage/companion.dart';
 import 'package:travel_app/screen/homepage/home.dart';
 import 'package:travel_app/screen/upcomingpage/starteditbutton.dart';
@@ -14,22 +19,25 @@ class GlobalKeyManager {
 
 class Upcoming extends StatefulWidget {
   Upcoming({Key? key, this.newvalue}) : super(key: key);
+
   final Plandetails? newvalue;
 
   @override
   State<Upcoming> createState() => _UpcomingState();
 }
 
-TextEditingController placecontroller = TextEditingController();
-TextEditingController startdatecontroller = TextEditingController();
-TextEditingController enddatecontroller = TextEditingController();
-TextEditingController expectamountcontroller = TextEditingController();
+
 
 class _UpcomingState extends State<Upcoming> {
   DateTime selectedstartingDate = DateTime.now();
   DateTime selectedendingDate = DateTime.now();
+  TextEditingController placecontroller = TextEditingController();
+TextEditingController startdatecontroller = TextEditingController();
+TextEditingController enddatecontroller = TextEditingController();
+TextEditingController expectamountcontroller = TextEditingController();
   GlobalKeyManager globalKeyManager = GlobalKeyManager();
-
+  List<CompanionModel>companionlist=[];
+ String type="Solo";
   @override
   void initState() {
     if (widget.newvalue != null) {
@@ -154,7 +162,7 @@ class _UpcomingState extends State<Upcoming> {
                               filled: true,
                               fillColor: Colors.white,
                               prefixIcon: Icon(Icons.calendar_month_rounded),
-                              hintText: 'Start Date',
+                              hintText: 'End Date',
                               hintStyle: TextStyle(fontSize: 20),
                               border: OutlineInputBorder(
                                 borderRadius:
@@ -190,14 +198,20 @@ class _UpcomingState extends State<Upcoming> {
                         InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (ctx) => const Companion()));
+                                builder: (ctx) =>  Companion(didpressnext: (companionlist,type) {
+                                  print("jishad${companionlist}");
+                                  setState(() {
+                                    this.type=type;
+                                   this.companionlist=companionlist;
+                                  });
+                                },)));
                           },
                           child: const SizedBox(
                             child: Row(
                               children: [
                                 Icon(Icons.add),
                                 Text(
-                                  'Invite a tripmate',
+                                  'Add tripmate',
                                   style: TextStyle(fontSize: 18),
                                 ),
                               ],
@@ -239,7 +253,7 @@ class _UpcomingState extends State<Upcoming> {
     );
 
     DateTime tomorrow = DateTime.now().add(Duration(days: -1));
-    if (picked != null && !picked.isBefore(tomorrow)) {
+    if (picked != null && !picked.isBefore(tomorrow)){
       setState(() {
         selectedstartingDate = picked;
         startdatecontroller.text = dateFormat(selectedstartingDate);
@@ -250,7 +264,38 @@ class _UpcomingState extends State<Upcoming> {
     }
   }
 
+
+//   Future<void> enddate(BuildContext context) async {
+//   final tripplandb = await Hive.openBox<Plandetails>('trip_plan_db');
+//   final DateTime? picked = await showDatePicker(
+//     context: context,
+//     initialDate: selectedendingDate,
+//     firstDate: DateTime(2000),
+//     lastDate: DateTime(2101),
+//   );
+
+//   if (picked != null) {
+//     bool isBetweenExistingDates = tripplandb.values.any((element) =>
+//         picked.isAfter(DateTime.parse(element.startdate)) &&
+//         picked.isBefore(DateTime.parse(element.enddate)));
+
+//     if (!picked.isBefore(selectedstartingDate) && isBetweenExistingDates) {
+//       setState(() {
+//         selectedendingDate = picked;
+//         enddatecontroller.text = dateFormat(selectedendingDate);
+//       });
+//     } else {
+//       if (mounted) {
+//         snackbar('Ending date cannot be before the starting date or within an existing plan');
+//       }
+//     }
+//   }
+// }
+
+
+
   Future<void> enddate(BuildContext context) async {
+    final tripplandb=await Hive.openBox<Plandetails>('trip_plan_db');
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedendingDate,
@@ -277,13 +322,25 @@ class _UpcomingState extends State<Upcoming> {
     final expectedamount = expectamountcontroller.text.trim();
     if (globalKeyManager.validation.currentState!.validate()) {
       final tripplan = Plandetails(
-       
+         triptype: type,
+          uniqeusername: check[sighnindata].username,
           place: place,
           startdate: startingdate,
           enddate: endingdate,
           expectedamount: expectedamount,
-         );
-      await tripplandetails(tripplan);
+         ); 
+          //  List<Plandetails>dates= await gettripdetails();
+          //  List<Plandetails>datess=await dates
+
+        //  if()
+     int tripid= await  tripplandetails(tripplan);
+      print(tripplan.id);
+      for(int i=0;i<companionlist.length;i++){
+        CompanionModel companionModel=companionlist[i];
+        companionModel.tripid=tripid;
+       addcompanions(companionModel);
+      }
+     
       if (mounted) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (ctx) => const Home()));
@@ -302,15 +359,17 @@ class _UpcomingState extends State<Upcoming> {
     final expectedamount = expectamountcontroller.text.trim();
     if (globalKeyManager.editValidation.currentState!.validate()) {
       final tripplan = Plandetails(
+        triptype: type,
+         uniqeusername: check[sighnindata].username,
           id: widget.newvalue!.id,
-          place: place,
+          place: place, 
           startdate: startingdate,
           enddate: endingdate,
           expectedamount: expectedamount,
           number:widget.newvalue!.number );
 
       edittripdetails(widget.newvalue!.id, tripplan);
-
+      
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (ctx) => const Home()));
 
@@ -334,5 +393,10 @@ class _UpcomingState extends State<Upcoming> {
   }
 
 
- 
+   
+//    Future <void> DateAlreadyexited()async{
+// final tripplandb=await Hive.openBox<Plandetails>('trip_plan_db');
+// if(tripplandb.values.any((element) => element.startdate==))
+
+//    }
 }

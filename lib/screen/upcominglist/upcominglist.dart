@@ -5,6 +5,7 @@ import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/favoritemodel.dart';
 import 'package:travel_app/model/tripplanmodel.dart';
 import 'package:travel_app/screen/homepage/home.dart';
+import 'package:travel_app/screen/loginpage/login_page.dart';
 import 'package:travel_app/screen/tripdetails/tripdetails.dart';
 import 'package:travel_app/screen/upcomingpage/upcoming.dart';
 
@@ -28,19 +29,15 @@ class _UpcominglistState extends State<Upcominglist> {
     const Home(),
     const Upcominglist(),
   ];
+    
 
-  @override
-  void initState() {
-    // TODO: implement initState
-
-    Future.delayed(Duration.zero, () async {
-      dbtripplan = await gettripdetails();
+    getupcomingtrips()async{
+  dbtripplan = await gettripdetails();
 
       setState(() {
         upcomingTrips = filterTripsUpcomings(dbtripplan);
       });
-
-      if (upcomingTrips.isNotEmpty) {
+        if (upcomingTrips.isNotEmpty) {
         upcomingTrips.sort((a, b) => a.startdate.compareTo(b.startdate));
 
         setState(() {
@@ -48,6 +45,18 @@ class _UpcominglistState extends State<Upcominglist> {
               List.generate(upcomingTrips.length, (index) => false);
         });
       }
+    }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+   
+
+
+    Future.delayed(Duration.zero, () async {
+    getupcomingtrips();
+
+    
     });
     super.initState();
   }
@@ -85,7 +94,8 @@ class _UpcominglistState extends State<Upcominglist> {
                     child: ListView.separated(
                       itemBuilder: (context, index) {
                         final data = upcomingTrips[index];
-
+                  print("data${data.favorite}");
+                  print(upcomingTrips);
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
@@ -104,57 +114,40 @@ class _UpcominglistState extends State<Upcominglist> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        data.place,
-                                        style: const TextStyle(
-                                          fontSize: 25,
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                
+                                                data.place,
+                                                maxLines: 1,
+                                                overflow:TextOverflow.ellipsis ,
+                                                style: const TextStyle(
+                                                  fontSize: 25,
+                                                ), 
+                                              ),
+                                            ),
+                                             IconButton(onPressed: (){}, icon: Icon(Icons.check_box_outlined,color: Colors.black,)),
+                                          ],
                                         ),
                                       ),
+                                      
                                       Row(
                                         children: [
                                           IconButton(
-                                              onPressed: () {
-                                                addfavoritetodb(data, index);
-                                                print(data.id);
-                                                print(data.id);
+                                              onPressed: ()async {
+                                              await  addfavoritetodb(data, index);
+                                                  getupcomingtrips();
+                                                
 
-                                                // setState(() {
-                                                //   // Check if dbtripplan[index].id exists in the Hive database
-                                                //   doesIdExist(
-                                                //           dbtripplan[index].id!)
-                                                //       .then((exists) {
-                                                //         print(exists);
-                                                //     if (exists) {
-                                                //       dbtripplan[index].favorite=!dbtripplan[index].favorite;
-                                                //       print('addfavoritetodb value und');
-                                                //     } else {
-                                                //     print("addfavorite db illa");
-                                                //     }
-                                                //   });
-                                                // });
-
-                                                // setState(() {
-                                                //   dbtripplan[index].favorite =
-                                                //       !dbtripplan[index]
-                                                //           .favorite;
-                                                //   if (dbtripplan[index]
-                                                //       .favorite) {
-                                                //     addfavoritetodb(
-                                                //         dbtripplan[index].id,
-                                                //         index);
-                                                //   } else if (!dbtripplan[index]
-                                                //       .favorite) {
-
-                                                //     deletefavorite(
-                                                //         dbtripplan[index].id);
-                                                //   }
-                                                // });
+                                               
                                               },
                                               icon: Icon(
                                                 Icons.favorite,
                                                 color:
-                                                    dbtripplan[index].favorite
-                                                        ? Colors.amber
+                                                    data.favorite
+                                                        ? Colors.red
                                                         : Colors.white,
                                               )),
                                           Align(
@@ -305,7 +298,7 @@ class _UpcominglistState extends State<Upcominglist> {
                                               0.02,
                                         ),
                                         Text(
-                                          'Ending Date            :     ${data.enddate}',
+                                          'Ending Date            :     ${ data.enddate}',
                                           style: const TextStyle(fontSize: 20),
                                         ),
                                         SizedBox(
@@ -374,60 +367,42 @@ class _UpcominglistState extends State<Upcominglist> {
     }
   }
 
-//   void addfavoritetodb(
-//     id,
-//     index,
-//   ) async {
-//       final addfavoriteDb=await Hive.openBox<Favoritemodel>('Dbaddfavorites');
-//     if (!addfavoriteDb.values.any((element) => element.id == id)) {
-//       final add = Favoritemodel(
-//           id: id,
-//           place: dbtripplan[index].place,
-//           startdate: dbtripplan[index].startdate,
-//           enddate: dbtripplan[index].enddate,
-//           expectedamount: dbtripplan[index].expectedamount);
 
-//       await addfavorites(add);
-//       setState(() {
-//         dbtripplan[index].favorite = !dbtripplan[index].favorite;
-//       });
-//     } else if (addfavoriteDb.values.any((element) => element.id == id)) {
-//       await deletefavoritedb(id);
-//       print("non favorite ${id}");
-//       setState(() {
 
-//         dbtripplan[index].favorite = !dbtripplan[index].favorite;
-//       });
-//   }
+  Future<void>addfavoritetodb(data, index) async {
+     final tripplandb=await Hive.openBox<Plandetails>('trip_plan_db');
+    var trip=  tripplandb.values.firstWhere((element) => element.id==data.id);
+     trip.favorite=!trip.favorite;
+     tripplandb.put(data.id, trip);
+     
 
-// }
+  
+    // final addfavoriteDb = await Hive.openBox<Favoritemodel>('Dbaddfavorites');
 
-  void addfavoritetodb(data, index) async {
-    final addfavoriteDb = await Hive.openBox<Favoritemodel>('Dbaddfavorites');
+    // if (!addfavoriteDb.values.any((element) => element.number == data.number)) {
+    //   final add = Favoritemodel(
+    //     uniqeusername: check[sighnindata].username,
+    //       id: data.id,
+    //       place: data.place,
+    //       startdate: data.startdate,
+    //       enddate: data.enddate,
+    //       expectedamount: data.expectedamount,
+    //       number: data.number);
 
-    if (!addfavoriteDb.values.any((element) => element.number == data.number)) {
-      final add = Favoritemodel(
-          id: data.id,
-          place: data.place,
-          startdate: data.startdate,
-          enddate: data.enddate,
-          expectedamount: data.expectedamount,
-          number: data.number);
+    //   await  addFavorite(add, check[sighnindata].username);
 
-      await addfavorites(add);
+    //   setState(() {
+    //     dbtripplan[index].favorite = true;
+    //   });
+    // } else {
+    //   final datas =
+    //       addfavoriteDb.values.firstWhere((item) => item.number == data.number);
 
-      setState(() {
-        dbtripplan[index].favorite = true;
-      });
-    } else {
-      final datas =
-          addfavoriteDb.values.firstWhere((item) => item.number == data.number);
+    //   await deleteFavorite(datas.id!,check[sighnindata].username);
 
-      await deletefavoritedb(datas.id!);
-
-      setState(() {
-        dbtripplan[index].favorite = false;
-      });
-    }
+    //   setState(() {
+    //     dbtripplan[index].favorite = false;
+    //   });
+    // }
   }
 }
