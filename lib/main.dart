@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:travel_app/model/companionmodel.dart';
 import 'package:travel_app/model/expensemodel.dart';
 import 'package:travel_app/model/favoritemodel.dart';
+import 'package:travel_app/model/iterymodel.dart';
 import 'package:travel_app/model/model.dart';
 import 'package:travel_app/model/tripphotosmodel.dart';
 import 'package:travel_app/model/tripplanmodel.dart';
@@ -35,6 +36,10 @@ Future<void> main()async {
 
   if(!Hive.isAdapterRegistered(CompanionModelAdapter().typeId)){
     Hive.registerAdapter(CompanionModelAdapter());
+  }
+
+   if(!Hive.isAdapterRegistered(IteryModelAdapter().typeId)){
+    Hive.registerAdapter(IteryModelAdapter());
   }
    runApp(const MyApp());
 }

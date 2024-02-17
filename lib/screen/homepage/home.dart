@@ -14,8 +14,8 @@ import 'package:travel_app/screen/upcomingpage/upcoming.dart';
 int sighnindata = check.isEmpty ? 0 : check.length - 1;
    List<Loginmodel> data=check;
 class Home extends StatefulWidget {
-  const Home({super.key});
-
+  const Home({super.key ,});
+     
   @override
   State<Home> createState() => _HomeState();
 }
@@ -122,7 +122,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   if (i == 0) {
                     return const Nowpage();
                   } else if (i == 1) {
-                    return const Upcominglist();
+                    return  Upcominglist();
                   }
                   return const Achivedpage();
                 }),

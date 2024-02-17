@@ -1,50 +1,44 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'expensemodel.dart';
+part of 'iterymodel.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ExpensemodelAdapter extends TypeAdapter<Expensemodel> {
+class IteryModelAdapter extends TypeAdapter<IteryModel> {
   @override
-  final int typeId = 3;
+  final int typeId = 7;
 
   @override
-  Expensemodel read(BinaryReader reader) {
+  IteryModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Expensemodel(
+    return IteryModel(
       id: fields[0] as int?,
-      date: fields[1] as String,
-      time: fields[2] as String,
-      category: fields[3] as String,
-      amount: fields[4] as String,
-      tripid: fields[5] as int?,
-      uniqeusername: fields[6] as String?,
+      itery: fields[1] as String,
+      tripid: fields[2] as int,
+      day: fields[3] as int,
+      time: fields[4] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Expensemodel obj) {
+  void write(BinaryWriter writer, IteryModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.date)
+      ..write(obj.itery)
       ..writeByte(2)
-      ..write(obj.time)
-      ..writeByte(3)
-      ..write(obj.category)
-      ..writeByte(4)
-      ..write(obj.amount)
-      ..writeByte(5)
       ..write(obj.tripid)
-      ..writeByte(6)
-      ..write(obj.uniqeusername);
+      ..writeByte(3)
+      ..write(obj.day)
+      ..writeByte(4)
+      ..write(obj.time);
   }
 
   @override
@@ -53,7 +47,7 @@ class ExpensemodelAdapter extends TypeAdapter<Expensemodel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ExpensemodelAdapter &&
+      other is IteryModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

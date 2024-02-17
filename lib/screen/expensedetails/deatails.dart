@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/expensemodel.dart';
+import 'package:travel_app/model/tripplanmodel.dart';
+
 
 
 class Expensedetails extends StatefulWidget {
-  const Expensedetails({super.key});
+   Plandetails plandetailsdata;
+   Expensedetails({super.key,required this.plandetailsdata});
 
   @override
   State<Expensedetails> createState() => _ExpensedetailsState();
@@ -26,7 +29,11 @@ class _ExpensedetailsState extends State<Expensedetails> {
   }
 
   void fetchData() async {
-    dbexpense = await getExpense();
+   if(widget.plandetailsdata.id==null){
+    return ;
+   }
+    dbexpense = await getExpense(widget.plandetailsdata.id!);
+
     addTotal();
   }
   void addTotal() {
@@ -46,7 +53,6 @@ class _ExpensedetailsState extends State<Expensedetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: InkWell(onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => Tripdetails())),child: Icon(Icons.arrow_back)),
         title: const Text("Expense"),
         centerTitle: true,
       ),
@@ -90,6 +96,7 @@ class _ExpensedetailsState extends State<Expensedetails> {
                                 padding: const EdgeInsets.all(20),
                                 child: ListView.separated(
                                   itemBuilder: (context, index) {
+                                    
                                     final data = dbexpense[index];
                                     return Row(
                                       mainAxisAlignment:

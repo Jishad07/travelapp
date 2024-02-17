@@ -61,7 +61,7 @@ class _SplashscreenState extends State<Splashscreen> {
     else{
       await Future.delayed(const Duration(seconds: 5));
      
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Home()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=> Home()));
     }
 
   }

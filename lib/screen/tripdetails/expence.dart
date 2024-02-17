@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/expensemodel.dart';
+import 'package:travel_app/model/tripplanmodel.dart';
 import 'package:travel_app/screen/expensedetails/deatails.dart';
+import 'package:travel_app/screen/homepage/home.dart';
+import 'package:travel_app/screen/loginpage/login_page.dart';
 
 class Expence extends StatefulWidget {
-   Expence({required this.expectedamount, super.key});
-   String? expectedamount;
+   Expence({required this.plandetailsdata,super.key});
+   Plandetails plandetailsdata;
+   var tripid;
   @override
   State<Expence> createState() => _ExpenceState();
 }
@@ -24,7 +28,7 @@ DateTime selectedtime = DateTime.now();
 
 class _ExpenceState extends State<Expence> {
   List<Expensemodel> dbexpense = [];
-  int newValue = 0;
+  var TotalAmount = 0;
   int balanceValue=0;
   @override
   void initState() {
@@ -33,7 +37,7 @@ class _ExpenceState extends State<Expence> {
       () {
         setState(() {
           gettotal();
-          getbalance();
+        
         });
       },
     );
@@ -71,7 +75,7 @@ class _ExpenceState extends State<Expence> {
                       child: InkWell(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => const Expensedetails()));
+                              builder: (ctx) =>  Expensedetails(plandetailsdata: widget.plandetailsdata,)));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -82,7 +86,7 @@ class _ExpenceState extends State<Expence> {
                             ),
                             Center(
                                 child: ExpenseText(
-                              newvalue: newValue,
+                              TotalAmount: TotalAmount,
                             )),
                           ],
                         ),
@@ -104,7 +108,7 @@ class _ExpenceState extends State<Expence> {
                   child: InkWell(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => const Expensedetails()));
+                          builder: (ctx) =>  Expensedetails(plandetailsdata: widget.plandetailsdata,)));
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +119,7 @@ class _ExpenceState extends State<Expence> {
                         ),
                         Center(
                             child:BalanceText(
-                          expectedamount:widget.expectedamount,
+                          expectedamount:widget.plandetailsdata.expectedamount,
                           balanceValue: balanceValue,
                           
                         )),
@@ -131,29 +135,7 @@ class _ExpenceState extends State<Expence> {
               padding: const EdgeInsets.all(8.0),
              
             ),
-            // ListView.separated(
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   itemBuilder: (context, index) {
-            //     final data = dbexpense[index];
-            //     return Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       children: [
-            //         Text(data.date),
-            //         Text(data.time),
-            //         Text(data.category),
-            //         Text(data.amount)
-            //       ],
-            //     );
-            //   },
-            //   separatorBuilder: (context, index) {
-            //     return const Divider(height: 1);
-            //   },
-            //   itemCount: dbexpense.length,
-            //   shrinkWrap: true,
-            // ),
-            // SizedBox(
-            // height: MediaQuery.of(context).size.height * 0.09,
-            // ),
+           
             FloatingActionButton(
               elevation: 20,
               splashColor: Colors.pink,
@@ -236,7 +218,7 @@ class _ExpenceState extends State<Expence> {
                                   child: const Text("Cancel")),
                               TextButton(
                                   onPressed: () {
-                                    expensechecking();
+                                    expensechecking(widget.tripid);
                                   },
                                   child: const Text('Add'))
                             ],
@@ -289,29 +271,34 @@ class _ExpenceState extends State<Expence> {
     return DateFormat('dd-MM-yyyy').format(date);
   }
 
-  void expensechecking() async {
+  void expensechecking(tripid) async {
     if (validation.currentState!.validate()) {
       final expensedate = datecontroller.text.trim();
       final expensetime = timecontroller.text.trim();
       final expensecategory = categorycontroller.text.trim();
       final expenseamount = amountcontroller.text.trim();
       final expense = Expensemodel(
+        uniqeusername: check[sighnindata].username,
+          tripid:widget.plandetailsdata.id,
           date: expensedate,
           time: expensetime,
           category: expensecategory,
           amount: expenseamount);
       await addexpense(expense);
       gettotal();
-      getbalance();
+  
       if (mounted) {
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (ctx) => const Expensedetails()));
+            MaterialPageRoute(builder: (ctx) =>  Expensedetails(plandetailsdata: widget.plandetailsdata,)));
       }
     }
   }
 
   void gettotal() async {
-    List<Expensemodel> newlist = await getExpense();
+    if(widget.plandetailsdata.id==null){
+      return ;
+    }
+    List<Expensemodel> newlist = await getExpense(widget.plandetailsdata.id!);
 
     setState(() {
       dbexpense = newlist;
@@ -324,49 +311,26 @@ class _ExpenceState extends State<Expence> {
     }
 
     setState(() {
-      newValue = total;
+      TotalAmount = total;
+       int c=int.parse(widget.plandetailsdata.expectedamount as String);
+      balanceValue=c-TotalAmount;
     });
   }
 
 
-   void getbalance() async {
-    List<Expensemodel> newlist = await getExpense();
-
-    setState(() {
-      dbexpense = newlist;
-    });
-    
-     int c=int.parse(widget.expectedamount as String);
-    total = c;
-      for (int i = 0; i < dbexpense.length; i++) {
-      int convertamount = int.parse(dbexpense[i].amount);
-      total -= convertamount; 
-    }
-
-    setState(() {
-      balanceValue = total;
-    });
-  }
+   
 }
 
 class ExpenseText extends StatefulWidget {
-  ExpenseText({this.newvalue,super.key});
-  int? newvalue = 0;
+  ExpenseText({this.TotalAmount,super.key});
+  int? TotalAmount = 0;
   
   @override
   State<ExpenseText> createState() => ExpenseTextState();
 }
 
 class ExpenseTextState extends State<ExpenseText> {
-  // void initState() {
-  //   // fetchData();
-  //   super.initState();
-  // }
-
-  //  void fetchData() async {
-  //   dbexpense = await getExpense();
-  //   addTotal();
-  // }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -377,7 +341,7 @@ class ExpenseTextState extends State<ExpenseText> {
         ).createShader(bounds);
       },
       child: Text(
-        '₹ ${widget.newvalue ?? 0}',
+        '₹ ${widget.TotalAmount ?? 0}',
         style: const TextStyle(
           fontSize: 30.0,
           fontWeight: FontWeight.bold,

@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:travel_app/model/companionmodel.dart';
 import 'package:travel_app/model/expensemodel.dart';
 import 'package:travel_app/model/favoritemodel.dart';
+import 'package:travel_app/model/iterymodel.dart';
 import 'package:travel_app/model/tripphotosmodel.dart';
 import 'package:travel_app/model/tripplanmodel.dart';
 import 'package:travel_app/screen/homepage/home.dart';
@@ -19,7 +20,7 @@ import 'model/model.dart';
  
  List <Loginmodel>user=[];
  List tripplanalldetails=[];
- List expenselist=[];
+//  List expenselist=[];
  List sortedlist=[];
  List tripimageslist=[];
  List addfavoritelist=[];
@@ -125,7 +126,7 @@ Future<List<Plandetails>> gettripdetails()async{
   final box=await Hive.openBox<Plandetails>('trip_plan_db');
   String loggedInUsername = check[sighnindata].username;
     List<Plandetails> filteredTripDetails = box.values.where((trip) {
-      print("get trip details fav=${trip.favorite}");
+      
       return trip.uniqeusername == loggedInUsername;
 
     }).toList();
@@ -161,16 +162,17 @@ Future<List<Plandetails>> gettripdetails()async{
  Future<void>addexpense(Expensemodel value)async{
   final expenseDb=await Hive.openBox<Expensemodel>('expens_Db');
   final _id= await expenseDb.add(value);
-   final id=_id;
+   value.id=_id;
    expenseDb.put(_id, value);
-   expenselist=expenseDb.values.toList();
-   print(expenseDb.values);
-   getExpense();
+  //  expenselist=expenseDb.values.toList();
+  return;
  }
 
- Future<List<Expensemodel>>getExpense()async{
+ Future<List<Expensemodel>>getExpense(int planid)async{
+  print("planid${planid}");
   final box=await Hive.openBox<Expensemodel>('expens_Db');
-  return box.values.toList();
+    return box.values.where((element) => element.tripid==planid).toList();
+    //  return box.values.toList();
  }
 
  Future<void>addtripicture(Tripphotosmodel value)async{
@@ -307,6 +309,34 @@ List<Plandetails> filterTripsUpcomings(List<Plandetails> trips) {
   return todayTrips;
 }
 
+Future<void>addIteryes(IteryModel value)async{
+  final addIteryDb=await Hive.openBox<IteryModel>('itery_Db'); 
+   final _id=await addIteryDb.add(value);
+  value.id=_id;
+  await addIteryDb.put(_id, value);
+  }
+
+
+Future<List<IteryModel>> gettiteryes(int tripid,int day)async{
+  final box=await Hive.openBox<IteryModel>('itery_Db');
+
+    List<IteryModel> filteredTripDetails = box.values.where((trip) {
+      
+      return trip.tripid == tripid && trip.day==day;
+
+    }).toList();
+      // return box.values.toList();
+    
+      return  filteredTripDetails;
+    //  dbtripplan.clear();
+    //  dbtripplan= box.values.toList();
+   }
+
+
+    Future<void>edititeryes( IteryModel model)async{
+    final box=await Hive.openBox<IteryModel>('itery_Db');
+       await box.put(model.id,model);
+    }
 
 
 

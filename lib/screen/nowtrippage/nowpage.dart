@@ -25,7 +25,7 @@ class _Nowtrip extends State<Nowpage> {
 
   int indexnum = 0;
   final List<Widget> screens = [
-    const Home(),
+     Home(),
     const Nowpage(),
   ];
 
@@ -196,7 +196,7 @@ class _Nowtrip extends State<Nowpage> {
                                                                           deletetripdetails(
                                                                               data.id!);
                                                                           Navigator.of(context)
-                                                                              .pushReplacement(MaterialPageRoute(builder: (ctx) => const Home()));
+                                                                              .pushReplacement(MaterialPageRoute(builder: (ctx) =>  Home()));
                                                                         });
                                                                       },
                                                                       child:
@@ -327,7 +327,7 @@ class _Nowtrip extends State<Nowpage> {
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const Home()),
+          MaterialPageRoute(builder: (context) =>  Home()),
         );
         break;
       case 1:

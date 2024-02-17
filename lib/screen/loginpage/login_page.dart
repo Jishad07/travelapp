@@ -142,7 +142,7 @@ class _LoginState extends State<Login> {
            final share=await SharedPreferences.getInstance();
            share.setBool(key, true);
            
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Home()));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=> Home()));
          }
          else {
           ScaffoldMessenger.of(context).showSnackBar(

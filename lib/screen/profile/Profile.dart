@@ -250,7 +250,7 @@ class _ProfilepageState extends State<Profilepage> {
     switch (index) {
       case 0:
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const Home()));
+            context, MaterialPageRoute(builder: (context) =>  Home()));
         break;
       case 1:
        showSearch(context: context, delegate: Search());

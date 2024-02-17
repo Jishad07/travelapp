@@ -28,7 +28,7 @@ class _Achivedpage extends State<Achivedpage> {
 
   int indexnum = 0;
   final List<Widget> screens = [
-    const Home(),
+     Home(),
     // const Nowpage()
     const Achivedpage()
   ];
@@ -222,7 +222,7 @@ class _Achivedpage extends State<Achivedpage> {
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const Home()),
+          MaterialPageRoute(builder: (context) =>  Home()),
         );
         break;
       case 1:

@@ -11,11 +11,15 @@ import 'package:hive_flutter/adapters.dart';
   @HiveField(1)
   String date;
   @HiveField(2)
- String time;
+  String time;
   @HiveField(3)
  String category;
   @HiveField(4)
   String amount;
+   @HiveField(5)
+  int? tripid;
+  @HiveField(6)
+ String? uniqeusername;
 
 
   Expensemodel({ 
@@ -24,5 +28,7 @@ import 'package:hive_flutter/adapters.dart';
     required this.time,
     required this.category,
     required this.amount,
+    this.tripid,
+    this.uniqeusername,
     });
 }

@@ -329,12 +329,11 @@ TextEditingController expectamountcontroller = TextEditingController();
           enddate: endingdate,
           expectedamount: expectedamount,
          ); 
-          //  List<Plandetails>dates= await gettripdetails();
-          //  List<Plandetails>datess=await dates
+         
 
-        //  if()
+      
      int tripid= await  tripplandetails(tripplan);
-      print(tripplan.id);
+     
       for(int i=0;i<companionlist.length;i++){
         CompanionModel companionModel=companionlist[i];
         companionModel.tripid=tripid;
@@ -343,7 +342,7 @@ TextEditingController expectamountcontroller = TextEditingController();
      
       if (mounted) {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (ctx) => const Home()));
+            .push(MaterialPageRoute(builder: (ctx) =>  Home()));
         placecontroller.clear();
         startdatecontroller.clear();
         enddatecontroller.clear();
@@ -371,7 +370,7 @@ TextEditingController expectamountcontroller = TextEditingController();
       edittripdetails(widget.newvalue!.id, tripplan);
       
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (ctx) => const Home()));
+          .push(MaterialPageRoute(builder: (ctx) =>  Home()));
 
       placecontroller.clear();
       startdatecontroller.clear();

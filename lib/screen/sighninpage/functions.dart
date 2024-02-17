@@ -32,7 +32,7 @@ Future<void>  signinchecking(context) async{
         margin: EdgeInsets.only(left: 8, right: 8, bottom: 35),
       ),
     );
-       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Home()));
+       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=> Home()));
          }else{
            ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(

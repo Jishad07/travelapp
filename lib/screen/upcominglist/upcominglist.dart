@@ -12,8 +12,9 @@ import 'package:travel_app/screen/upcomingpage/upcoming.dart';
 //  List<Plandetails>dbtripplan=[];
 
 class Upcominglist extends StatefulWidget {
-  const Upcominglist({super.key});
-
+ 
+   Upcominglist({super.key,});
+    
   @override
   State<Upcominglist> createState() => _UpcominglistState();
 }
@@ -26,8 +27,8 @@ class _UpcominglistState extends State<Upcominglist> {
   List<Plandetails> upcomingTrips = [];
   int indexnum = 0;
   final List<Widget> screens = [
-    const Home(),
-    const Upcominglist(),
+     const Home(),
+     Upcominglist(),
   ];
     
 
@@ -94,8 +95,7 @@ class _UpcominglistState extends State<Upcominglist> {
                     child: ListView.separated(
                       itemBuilder: (context, index) {
                         final data = upcomingTrips[index];
-                  print("data${data.favorite}");
-                  print(upcomingTrips);
+                 
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
@@ -222,7 +222,7 @@ class _UpcominglistState extends State<Upcominglist> {
                                                                           deletetripdetails(
                                                                               data.id!);
                                                                           Navigator.of(context)
-                                                                              .pushReplacement(MaterialPageRoute(builder: (ctx) => const Home()));
+                                                                              .pushReplacement(MaterialPageRoute(builder: (ctx) =>  Home()));
                                                                         });
                                                                       },
                                                                       child:
@@ -352,7 +352,7 @@ class _UpcominglistState extends State<Upcominglist> {
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const Home()),
+          MaterialPageRoute(builder: (context) =>  Home()),
         );
         break;
       case 1:

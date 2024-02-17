@@ -190,7 +190,7 @@ class Signin extends StatefulWidget {
                         if(value!.isEmpty){
                           return 'Please enter phonenumber';
                         }
-                        if(!isValidPhoneNumber(value)){
+                        if(!RegExp(r'^[0-9]{10}$').hasMatch(value)){
                           return 'Invalid phone number';
                         }
                          return null;

@@ -15,7 +15,7 @@ class Companion extends StatefulWidget {
 }
 
 class _CompanionState extends State<Companion> {
-  // Contact? pickedContact;
+
   List<Contact> pickedContactsList = [];
   String type='solo';
   List<String> companions=[];
@@ -261,7 +261,7 @@ class _CompanionState extends State<Companion> {
                                         .width * 0.05,),
                                     InkWell(
                                       onTap: () {
-                                      //  clickfamilyandgroup(context,'Add Members', 'Please Add Your Family','Family name');
+                                  
                                       setState(() {
                                         type='family';
                                       });
@@ -287,7 +287,7 @@ class _CompanionState extends State<Companion> {
                                         .width * 0.05,),
                                     InkWell(
                                       onTap: () {
-                                          // clickfamilyandgroup(context,'Add Members', 'Please Add Your Friends','Friend name');
+                                     
                                           setState(() {
                                             type='group';
                                           });
@@ -321,7 +321,7 @@ class _CompanionState extends State<Companion> {
                         children: [
                           ElevatedButton(onPressed: (){
                             addcontact();
-                              //  didpressadd('Add', "Please add new $type", type);
+                             
                           }, child:Text("+ Add your $type")),
                         ],
                       ),
@@ -399,42 +399,4 @@ widget.didpressnext!(companionlist,type);
 }
 
 }
-
-  // void didpressadd(String title,String content,String hintname) {
-  // showDialog(
-  //   context: context,
-  //   builder: (context) {
-  //     return AlertDialog(
-
-  //       title: Text(title),
-  //       content:  Text(content),
-  //       actions: [
-  //         TextFormField(
-  //           controller: namecontroller,
-  //           decoration:  InputDecoration(hintText: hintname,
-  //           ),
-  //         ),
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.end,
-  //           children: [
-  //             TextButton(onPressed: (){
-  //                Navigator.of(context).pop();        
-  //             }, child:const Text("Cancel")),
-  //             TextButton(onPressed: () {
-  //               String name =namecontroller.text;
-  //               if(name.isNotEmpty){
-  //                 setState(() {
-  //                   companions.add(name);
-  //                 });
-  //                 namecontroller.text='';
-  //                 Navigator.of(context).pop();
-  //               }
-  //             }, child: const Text('Save')),
-  //           ],
-  //         )
-  //       ],
-  //     );
-  //   },
-  // );
-// }
 }
