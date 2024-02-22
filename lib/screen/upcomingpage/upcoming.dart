@@ -96,6 +96,7 @@ TextEditingController expectamountcontroller = TextEditingController();
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         TextFormField(
+                          textCapitalization: TextCapitalization.words,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Please Enter Your location ';
@@ -265,33 +266,6 @@ TextEditingController expectamountcontroller = TextEditingController();
   }
 
 
-//   Future<void> enddate(BuildContext context) async {
-//   final tripplandb = await Hive.openBox<Plandetails>('trip_plan_db');
-//   final DateTime? picked = await showDatePicker(
-//     context: context,
-//     initialDate: selectedendingDate,
-//     firstDate: DateTime(2000),
-//     lastDate: DateTime(2101),
-//   );
-
-//   if (picked != null) {
-//     bool isBetweenExistingDates = tripplandb.values.any((element) =>
-//         picked.isAfter(DateTime.parse(element.startdate)) &&
-//         picked.isBefore(DateTime.parse(element.enddate)));
-
-//     if (!picked.isBefore(selectedstartingDate) && isBetweenExistingDates) {
-//       setState(() {
-//         selectedendingDate = picked;
-//         enddatecontroller.text = dateFormat(selectedendingDate);
-//       });
-//     } else {
-//       if (mounted) {
-//         snackbar('Ending date cannot be before the starting date or within an existing plan');
-//       }
-//     }
-//   }
-// }
-
 
 
   Future<void> enddate(BuildContext context) async {
@@ -320,6 +294,12 @@ TextEditingController expectamountcontroller = TextEditingController();
     final startingdate = startdatecontroller.text.trim();
     final endingdate = enddatecontroller.text.trim();
     final expectedamount = expectamountcontroller.text.trim();
+     
+      //  final List<Plandetails> existingTrips = await getAllTripsFromDatabase();
+
+        // bool isDateAvailable = checkDateAvailability(
+      // startingdate, endingdate, existingTrips);
+
     if (globalKeyManager.validation.currentState!.validate()) {
       final tripplan = Plandetails(
          triptype: type,
@@ -330,7 +310,7 @@ TextEditingController expectamountcontroller = TextEditingController();
           expectedamount: expectedamount,
          ); 
          
-
+    
       
      int tripid= await  tripplandetails(tripplan);
      
@@ -342,7 +322,7 @@ TextEditingController expectamountcontroller = TextEditingController();
      
       if (mounted) {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (ctx) =>  Home()));
+            .push(MaterialPageRoute(builder: (ctx) =>  const Home()));
         placecontroller.clear();
         startdatecontroller.clear();
         enddatecontroller.clear();

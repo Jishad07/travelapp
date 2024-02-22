@@ -6,7 +6,7 @@ import 'package:travel_app/screen/achivedpage/achivedpage.dart';
 import 'package:travel_app/screen/loginpage/login_page.dart';
 import 'package:travel_app/screen/homepage/drawerstructure.dart';
 import 'package:travel_app/screen/nowtrippage/nowpage.dart';
-import 'package:travel_app/screen/profile/Profile.dart';
+import 'package:travel_app/screen/profile/profile.dart';
 import 'package:travel_app/screen/searchScreen/searchscreen.dart';
 import 'package:travel_app/screen/upcominglist/upcominglist.dart';
 import 'package:travel_app/screen/upcomingpage/upcoming.dart';

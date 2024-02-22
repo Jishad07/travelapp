@@ -1,5 +1,6 @@
  import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/model.dart';
@@ -24,13 +25,24 @@ Future<void>  signinchecking(context) async{
         final sharedpref=await SharedPreferences.getInstance();
       sharedpref.setBool(key, true);
           ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Registration successful'),
-        duration: Duration(seconds: 5),
+         SnackBar(
+        content:   Row(
+          children: [
+           const Text('Registration successful'),
+            SizedBox(
+              height: MediaQuery.of(context).size.height/20,
+              width: MediaQuery.of(context).size.width/20,
+              child: Lottie.asset("assets/animation/Animation - 1708161670311.json",repeat:false)
+            )
+          ],
+        ),
+        duration: Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.red,
         margin: EdgeInsets.only(left: 8, right: 8, bottom: 35),
+
       ),
+      
     );
        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=> Home()));
          }else{

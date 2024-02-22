@@ -5,13 +5,13 @@ import 'package:hive_flutter/adapters.dart';
   @HiveField(0)
   int? id;
   @HiveField(1)
- String itery;
+ String itery; 
  @HiveField(2)
  int tripid;
  @HiveField(3)
  int day;
  @HiveField(4)
- int time;
+ String time;
 
  IteryModel({
   required this.id,

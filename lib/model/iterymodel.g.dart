@@ -21,7 +21,7 @@ class IteryModelAdapter extends TypeAdapter<IteryModel> {
       itery: fields[1] as String,
       tripid: fields[2] as int,
       day: fields[3] as int,
-      time: fields[4] as int,
+      time: fields[4] as String,
     );
   }
 

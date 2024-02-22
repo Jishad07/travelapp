@@ -8,7 +8,7 @@ import 'package:travel_app/screen/firstpage/first_page.dart';
 import 'package:travel_app/screen/homepage/home.dart';
 import 'package:travel_app/screen/loginpage/login_page.dart';
 import 'package:travel_app/screen/privacypolicy/privacypolicy.dart';
-import 'package:travel_app/screen/profile/Profile.dart';
+import 'package:travel_app/screen/profile/profile.dart';
 import 'package:travel_app/screen/terms&contitions/termsandcontitions.dart';
 
 class Drawerscreen extends StatelessWidget {

@@ -25,13 +25,13 @@ class _Nowtrip extends State<Nowpage> {
 
   int indexnum = 0;
   final List<Widget> screens = [
-     Home(),
+   const  Home(),
     const Nowpage(),
   ];
 
   @override
   void initState() {
-    // TODO: implement initState
+  
 
    
     Future.delayed(Duration.zero, () async {

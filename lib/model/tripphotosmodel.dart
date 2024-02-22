@@ -7,5 +7,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 class Tripphotosmodel{
   @HiveField(0)
   String? images;
-  Tripphotosmodel({ this.images});
+  @HiveField(1)
+  int tripid;
+  Tripphotosmodel({
+     this.images,
+     required this.tripid});
 }

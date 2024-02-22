@@ -72,6 +72,7 @@ class Signin extends StatefulWidget {
                         child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child:  TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   validator: (value){
                         if(value!.isEmpty){
                           return 'Please enter username';

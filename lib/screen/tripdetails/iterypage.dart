@@ -1,8 +1,10 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/iterymodel.dart';
 import 'package:travel_app/model/tripplanmodel.dart';
-import 'package:travel_app/screen/tripdetails/expence.dart';
+
 
 class IteryPage extends StatefulWidget {
   Plandetails plandetails;
@@ -16,12 +18,15 @@ class IteryPage extends StatefulWidget {
 class _IteryPageState extends State<IteryPage> {
 
   TextEditingController itercontroller = TextEditingController();
+  TextEditingController iterytimecontroller = TextEditingController();
    
  @override
   void initState() {
+     fetchData();
+     print("itery init");
     super.initState();
     
-    fetchData();
+   
   }
 
    fetchData()async{
@@ -35,9 +40,11 @@ class _IteryPageState extends State<IteryPage> {
   List<IteryModel>iteryes=[];
   @override
   Widget build(BuildContext context) {
+    
     return ListView.builder(
       // shrinkWrap: true,physics:NeverScrollableScrollPhysics() ,
-      itemBuilder: (BuildContext,index){
+      itemBuilder: (context,index){
+    
             if(index==0){
 
             
@@ -48,13 +55,13 @@ class _IteryPageState extends State<IteryPage> {
             children: [
               ElevatedButton(onPressed: (){
                    showdailog(null);
-                }, child: Text("Add")),
+                }, child: const Text("Add")),
             ],
           ),
         );}
       return  GestureDetector(
         onTap: () {
-         showdailog(iteryes[index-1]);
+         showdailog(iteryes[index]);
         },
         child: Container(
         
@@ -64,26 +71,59 @@ class _IteryPageState extends State<IteryPage> {
                 children: [
                   SizedBox(
                     width: 100,
-                    child: Center(
-                      child: Container(
-                        constraints: BoxConstraints(
-                          minHeight: 100,
-                        ),
-                        width: 10,
-                        // height: double.infinity,
-                        color: Colors.grey,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8,right: 8,bottom: 5),
+                      child: Row(
+                        children: [
+                          Text(iteryes[index-1].time),
+                         const  SizedBox(width: 15,),
+                          Container(
+                            constraints:const BoxConstraints(
+                              minHeight: 100,
+                            ),
+                            width: 7,
+                            // height: double.infinity,
+                            color: Colors.grey,
+                            child:const CircleAvatar(
+                              backgroundColor: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     ),
                     Expanded(
-                      child:Text(iteryes[index-1].itery))
+                      child:Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(iteryes[index-1].itery),
+                          IconButton(onPressed: ()async{
+                            print("button clicked");
+                           
+                           await deleteiteryes(iteryes[index-1].id!);
+                         
+                            fetchData();
+                          }, icon:const Icon(Icons.delete))
+                        ],
+                      ))
                 ],
               ),
             ),
       );
     },
-    itemCount: iteryes.length+1,
+    itemCount:iteryes.length+1,
     );
+  }
+
+   Future<void> time() async {
+    final TimeOfDay? picked =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+
+    if (picked != null) {
+      setState(() {
+       iterytimecontroller.text= picked.format(context);
+      });
+    }
   }
 
   void showdailog(IteryModel? model){
@@ -102,6 +142,22 @@ class _IteryPageState extends State<IteryPage> {
                           child: Column(
                             children: [
                               TextFormField(
+                                onTap: () {
+                                  time();
+                                },
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter iteries';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              
+                                controller:iterytimecontroller,
+                                decoration:
+                                    const InputDecoration(hintText: 'Time'),
+                              ),
+                               TextFormField(
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Please enter iteries';
@@ -130,14 +186,16 @@ class _IteryPageState extends State<IteryPage> {
                             TextButton(
                                 onPressed: () async{
                                   if(model==null){
-                                      IteryModel iteryModel= IteryModel(id:null, itery:itercontroller.text, tripid:widget.plandetails.id!, day: widget.day, time: 0);
+                                      IteryModel iteryModel= IteryModel(id:null, itery:itercontroller.text, tripid:widget.plandetails.id!, day: widget.day, time: iterytimecontroller.text.toString());
                                  await addIteryes(iteryModel);
                                   }else{
                                     model.itery=itercontroller.text;
                                     await edititeryes(model);
                                   }
-                                  
-                                 Navigator.of(context).pop();
+                                  if(mounted){
+                                     Navigator.of(context).pop();
+                                  }
+                              
                                 fetchData();
                                 },
                                 child: Text( model == null?"Add":"Update"))

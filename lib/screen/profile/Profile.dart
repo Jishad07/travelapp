@@ -1,11 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_app/db_functions.dart';
-import 'package:travel_app/model/model.dart';
 import 'package:travel_app/screen/EditProfilePage/editprofilepage.dart.dart';
 import 'package:travel_app/screen/firstpage/first_page.dart';
 import 'package:travel_app/screen/homepage/home.dart';
@@ -37,7 +33,7 @@ class _ProfilepageState extends State<Profilepage> {
   @override
   void initState() {
    
-    final data=check;
+    // final data=check;
     editusernamecontroller.text=check[sighnindata].username;
     editpasswordcontroller.text=check[sighnindata].password;
     editemailcontroller.text=check[sighnindata].email;
@@ -154,7 +150,7 @@ class _ProfilepageState extends State<Profilepage> {
                                             text: 'Edit profile'),
                                         IconButton(
                                             onPressed: () {
-                                           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>EditProfilPage()));
+                                           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const EditProfilPage()));
             
                                             
                                             },
@@ -250,7 +246,7 @@ class _ProfilepageState extends State<Profilepage> {
     switch (index) {
       case 0:
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) =>  Home()));
+            context, MaterialPageRoute(builder: (context) => const Home()));
         break;
       case 1:
        showSearch(context: context, delegate: Search());
@@ -295,7 +291,10 @@ class _ProfilepageState extends State<Profilepage> {
   Future<void> logout(BuildContext context) async {
   final sharedpref = await SharedPreferences.getInstance();
   sharedpref.clear();
-  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=>First_page()), (route) => false);
+  if(mounted){
+  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=>const First_page()), (route) => false);
+  }
+
      
 }
 

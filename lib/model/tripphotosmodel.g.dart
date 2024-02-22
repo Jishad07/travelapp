@@ -18,15 +18,18 @@ class TripphotosmodelAdapter extends TypeAdapter<Tripphotosmodel> {
     };
     return Tripphotosmodel(
       images: fields[0] as String?,
+      tripid: fields[1] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Tripphotosmodel obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.images);
+      ..write(obj.images)
+      ..writeByte(1)
+      ..write(obj.tripid);
   }
 
   @override

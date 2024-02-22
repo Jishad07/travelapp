@@ -1,5 +1,7 @@
 
 
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_app/db_functions.dart';
@@ -28,7 +30,7 @@ DateTime selectedtime = DateTime.now();
 
 class _ExpenceState extends State<Expence> {
   List<Expensemodel> dbexpense = [];
-  var TotalAmount = 0;
+  var totalamount = 0;
   int balanceValue=0;
   @override
   void initState() {
@@ -86,7 +88,7 @@ class _ExpenceState extends State<Expence> {
                             ),
                             Center(
                                 child: ExpenseText(
-                              TotalAmount: TotalAmount,
+                             totalamount: totalamount,
                             )),
                           ],
                         ),
@@ -131,8 +133,8 @@ class _ExpenceState extends State<Expence> {
                 ],
               ),
             
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+          const  Padding(
+              padding: EdgeInsets.all(8.0),
              
             ),
            
@@ -311,9 +313,9 @@ class _ExpenceState extends State<Expence> {
     }
 
     setState(() {
-      TotalAmount = total;
+      totalamount = total;
        int c=int.parse(widget.plandetailsdata.expectedamount as String);
-      balanceValue=c-TotalAmount;
+      balanceValue=c-totalamount;
     });
   }
 
@@ -322,8 +324,8 @@ class _ExpenceState extends State<Expence> {
 }
 
 class ExpenseText extends StatefulWidget {
-  ExpenseText({this.TotalAmount,super.key});
-  int? TotalAmount = 0;
+  ExpenseText({this.totalamount,super.key});
+  int? totalamount = 0;
   
   @override
   State<ExpenseText> createState() => ExpenseTextState();
@@ -341,7 +343,7 @@ class ExpenseTextState extends State<ExpenseText> {
         ).createShader(bounds);
       },
       child: Text(
-        '₹ ${widget.TotalAmount ?? 0}',
+        '₹ ${widget.totalamount ?? 0}',
         style: const TextStyle(
           fontSize: 30.0,
           fontWeight: FontWeight.bold,

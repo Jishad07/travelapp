@@ -128,7 +128,7 @@ class _UpcominglistState extends State<Upcominglist> {
                                                 ), 
                                               ),
                                             ),
-                                             IconButton(onPressed: (){}, icon: Icon(Icons.check_box_outlined,color: Colors.black,)),
+                                   
                                           ],
                                         ),
                                       ),

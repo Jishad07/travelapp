@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/favoritemodel.dart';
 import 'package:travel_app/model/tripplanmodel.dart';
 import 'package:travel_app/screen/homepage/home.dart';
 import 'package:travel_app/screen/loginpage/login_page.dart';
-import 'package:travel_app/screen/nowtrippage/nowpage.dart';
 import 'package:travel_app/screen/tripdetails/tripdetails.dart';
 import 'package:travel_app/screen/upcomingpage/upcoming.dart';
 
@@ -28,17 +27,14 @@ class _Achivedpage extends State<Achivedpage> {
 
   int indexnum = 0;
   final List<Widget> screens = [
-     Home(),
+    const Home(),
     // const Nowpage()
     const Achivedpage()
   ];
 
   @override
   void initState() {
-    // TODO: implement initState
-
-   
-    Future.delayed(Duration.zero, () async {
+  Future.delayed(Duration.zero, () async {
       dbtripplan = await gettripdetails();
       setState(() {
           todayTrips = filterAchivedTrips(dbtripplan);
@@ -222,7 +218,7 @@ class _Achivedpage extends State<Achivedpage> {
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>  Home()),
+          MaterialPageRoute(builder: (context) => const Home()),
         );
         break;
       case 1:

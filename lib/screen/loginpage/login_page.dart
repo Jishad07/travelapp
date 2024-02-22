@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/model/model.dart';
 import 'package:travel_app/screen/homepage/home.dart';
@@ -56,6 +57,7 @@ class _LoginState extends State<Login> {
      Padding(
                padding: const EdgeInsets.all(8.0),
                 child:  TextFormField(
+                  textCapitalization: TextCapitalization.words,
                  controller: usernamecontroller,
                    validator: (value){
                       if(value!.isEmpty){
@@ -141,8 +143,27 @@ class _LoginState extends State<Login> {
           sighnindata=i;
            final share=await SharedPreferences.getInstance();
            share.setBool(key, true);
-           
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=> Home()));
+                ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(
+        content:   Row(
+          children: [
+           const Text('Registration successful'),
+            SizedBox(
+              height: MediaQuery.of(context).size.height/20,
+              width: MediaQuery.of(context).size.width/20,
+              child: Lottie.asset("assets/animation/Animation - 1708161670311.json",repeat:true)
+            )
+          ],
+        ),
+        duration: Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.red,
+        margin: EdgeInsets.only(left: 8, right: 8, bottom: 35),
+
+      ),
+      
+    );
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Home()));
          }
          else {
           ScaffoldMessenger.of(context).showSnackBar(

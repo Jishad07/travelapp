@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/model.dart';
-import 'package:travel_app/screen/EditProfilePage/Button.dart';
 import 'package:travel_app/screen/homepage/home.dart';
 import 'package:travel_app/screen/loginpage/login_page.dart';
-import 'package:travel_app/screen/profile/Profile.dart';
+import 'package:travel_app/screen/profile/profile.dart';
 
 class EditProfilPage extends StatefulWidget {
   const EditProfilPage({super.key});
@@ -28,16 +27,16 @@ class _EditProfilPageState extends State<EditProfilPage> {
   final GlobalKey<FormState> editvalidation = GlobalKey<FormState>();
   @override
   void initState() {
-    final data = check;
+    // final data = check;
     editusernamecontroller.text = check[sighnindata].username;
     editpasswordcontroller.text = check[sighnindata].password;
     editemailcontroller.text = check[sighnindata].email;
     editphonenumbercontroller.text = check[sighnindata].phonenumber;
-               final editimage=image1 != null
-                      ? FileImage(image1!)
-                      : FileImage(File(
-                          check[sighnindata].image,
-                        ));
+              //  final editimage=image1 != null
+                      // ? FileImage(image1!)
+                      // : FileImage(File(
+                          // check[sighnindata].image,
+                        // ));
     
     // TODO: implement initState
     super.initState();
@@ -205,7 +204,7 @@ class _EditProfilPageState extends State<EditProfilPage> {
 
   void editprofilechecking() {
     //final editimage=check[sighnindata].image;
-    final editimage=image;
+    // final editimage=image;
     final editedusername = editusernamecontroller.text.trim();
     final editedpassword = editpasswordcontroller.text.trim();
     final editedemail = editemailcontroller.text.trim();

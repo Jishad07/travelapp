@@ -3,6 +3,7 @@
 
 
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
@@ -22,29 +23,13 @@ import 'model/model.dart';
  List tripplanalldetails=[];
 //  List expenselist=[];
  List sortedlist=[];
- List tripimageslist=[];
+
  List addfavoritelist=[];
  List nowtrip=[];
 // List<Expensemodel>sortlist=[];
 
 
- //sighnin details add to database 
-// Future<void> addsignindetails(Loginmodel value) async {
-//   final loginDb = await Hive.openBox<Loginmodel>('login_db');
 
-
-//   bool isUsernameUnique = !loginDb.values.any((element) => element.username == usernamecontroller.text.trim());
-
-//   if (isUsernameUnique) {
-//     final _id = await loginDb.add(value); // await for the completion of the add method
-//     value.id = _id;
-//     loginDb.put(_id, value);
-//     check = loginDb.values.toList();
-//     getdetails();
-//   } else {
-//     print('Username is not unique');
-//   }
-// }
  
  Future<void> addsignindetails(Loginmodel value,context) async {
   final loginDb = await Hive.openBox<Loginmodel>('login_db');
@@ -61,27 +46,7 @@ import 'model/model.dart';
     getdetails();
   // }
 
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     const SnackBar(
-  //       content: Text('Registration successful'),
-  //       duration: Duration(seconds: 2),
-  //       behavior: SnackBarBehavior.floating,
-  //       backgroundColor: Colors.green,
-  //       margin: EdgeInsets.only(left: 8, right: 8, bottom: 35),
-  //     ),
-  //   );
-  // } else {
-    
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     const SnackBar(
-  //       content: Text('Username already exists. Please choose a different one.'),
-  //       duration: Duration(seconds: 2),
-  //       behavior: SnackBarBehavior.floating,
-  //       backgroundColor: Colors.red,
-  //       margin: EdgeInsets.only(left: 8, right: 8, bottom: 35),
-  //     ),
-  //   );
-  // }
+
 
 }
 
@@ -169,21 +134,26 @@ Future<List<Plandetails>> gettripdetails()async{
  }
 
  Future<List<Expensemodel>>getExpense(int planid)async{
-  print("planid${planid}");
+ 
   final box=await Hive.openBox<Expensemodel>('expens_Db');
     return box.values.where((element) => element.tripid==planid).toList();
     //  return box.values.toList();
  }
 
- Future<void>addtripicture(Tripphotosmodel value)async{
+ Future<int>addtripicture(Tripphotosmodel value)async{
   final addimagesDb=await Hive.openBox<Tripphotosmodel>('addimages_Db');
   final id=await addimagesDb.add(value);
-  addimagesDb.put(id, value);
-  tripimageslist.clear();
-  tripimageslist=addimagesDb.values.toList();
-  print(tripimageslist[0]);
- }
+   addimagesDb.put(id, value);
+   return id;
+  }
 
+  
+ Future<List<Tripphotosmodel>>getImages(int planid)async{
+ 
+final box=await Hive.openBox<Tripphotosmodel>('addimages_Db');
+    return box.values.where((element) => element.tripid==planid).toList();
+    //  return box.values.toList();
+ }
 // Modify your database function to associate favorites with users
 Future<void> addFavorite(Favoritemodel value, String userId) async {
   print('add favorite db okke');
@@ -337,6 +307,13 @@ Future<List<IteryModel>> gettiteryes(int tripid,int day)async{
     final box=await Hive.openBox<IteryModel>('itery_Db');
        await box.put(model.id,model);
     }
+
+       Future<void>deleteiteryes(int id)async{
+        print("tripid=${id}");
+        final box=await Hive.openBox<IteryModel>('itery_Db');
+        await box.delete(id);
+        
+  }
 
 
 
