@@ -352,7 +352,7 @@ class _TripdetailsState extends State<Tripdetails>
   }
 
   int dateDifferenceInDays(String date1Str, String date2Str) {
-    final dateFormat = DateFormat('dd-MM-yyyy');
+    final dateFormat = DateFormat('dd-MMM-yyyy');
 
     DateTime date1 = dateFormat.parse(date1Str);
     DateTime date2 = dateFormat.parse(date2Str);

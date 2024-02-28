@@ -11,11 +11,18 @@ import 'package:travel_app/screen/privacypolicy/privacypolicy.dart';
 import 'package:travel_app/screen/profile/profile.dart';
 import 'package:travel_app/screen/terms&contitions/termsandcontitions.dart';
 
-class Drawerscreen extends StatelessWidget {
-  const Drawerscreen({
+class Drawerscreen extends StatefulWidget {
+  Function?didchangefav;
+  Drawerscreen({
     super.key,
+    this.didchangefav
   });
 
+  @override
+  State<Drawerscreen> createState() => _DrawerscreenState();
+}
+
+class _DrawerscreenState extends State<Drawerscreen> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -63,8 +70,12 @@ class Drawerscreen extends StatelessWidget {
                     title: const Text("My Account"),
                   ),
                    ListTile(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const Favoritepage()));
+                    onTap: () async{
+                     await Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const Favoritepage()));
+                     if(widget.didchangefav!=null){
+                            widget.didchangefav!();
+                     }
+                    
                     },
                     leading: const Icon(Icons.star_border),
                     title: const Text("Favorite"),

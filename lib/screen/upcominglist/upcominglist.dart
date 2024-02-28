@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/favoritemodel.dart';
@@ -12,9 +13,10 @@ import 'package:travel_app/screen/upcomingpage/upcoming.dart';
 //  List<Plandetails>dbtripplan=[];
 
 class Upcominglist extends StatefulWidget {
- 
-   Upcominglist({super.key,});
-    
+  Upcominglist({
+    super.key,
+  });
+
   @override
   State<Upcominglist> createState() => _UpcominglistState();
 }
@@ -27,37 +29,31 @@ class _UpcominglistState extends State<Upcominglist> {
   List<Plandetails> upcomingTrips = [];
   int indexnum = 0;
   final List<Widget> screens = [
-     const Home(),
-     Upcominglist(),
+    const Home(),
+    Upcominglist(),
   ];
-    
 
-    getupcomingtrips()async{
-  dbtripplan = await gettripdetails();
+  getupcomingtrips() async {
+    dbtripplan = await gettripdetails();
+
+    setState(() {
+      upcomingTrips = filterTripsUpcomings(dbtripplan);
+    });
+    if (upcomingTrips.isNotEmpty) {
+      upcomingTrips.sort((a, b) => a.startdate.compareTo(b.startdate));
 
       setState(() {
-        upcomingTrips = filterTripsUpcomings(dbtripplan);
+        isExpandedList = List.generate(upcomingTrips.length, (index) => false);
       });
-        if (upcomingTrips.isNotEmpty) {
-        upcomingTrips.sort((a, b) => a.startdate.compareTo(b.startdate));
-
-        setState(() {
-          isExpandedList =
-              List.generate(upcomingTrips.length, (index) => false);
-        });
-      }
     }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
-   
-
 
     Future.delayed(Duration.zero, () async {
-    getupcomingtrips();
-
-    
+      getupcomingtrips();
     });
     super.initState();
   }
@@ -95,7 +91,7 @@ class _UpcominglistState extends State<Upcominglist> {
                     child: ListView.separated(
                       itemBuilder: (context, index) {
                         final data = upcomingTrips[index];
-                 
+
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
@@ -119,44 +115,40 @@ class _UpcominglistState extends State<Upcominglist> {
                                           children: [
                                             Expanded(
                                               child: Text(
-                                                
                                                 data.place,
                                                 maxLines: 1,
-                                                overflow:TextOverflow.ellipsis ,
+                                                overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
                                                   fontSize: 25,
-                                                ), 
+                                                ),
                                               ),
                                             ),
-                                   
                                           ],
                                         ),
                                       ),
-                                      
                                       Row(
                                         children: [
                                           IconButton(
-                                              onPressed: ()async {
-                                              await  addfavoritetodb(data, index);
-                                                  getupcomingtrips();
-                                                
-
-                                               
+                                              onPressed: () async {
+                                                await addfavoritetodb(
+                                                    data, index);
+                                                   getupcomingtrips();
                                               },
                                               icon: Icon(
                                                 Icons.favorite,
-                                                color:
-                                                    data.favorite
-                                                        ? Colors.red
-                                                        : Colors.white,
+                                                color: data.favorite
+                                                    ? Colors.red
+                                                    : Colors.white,
                                               )),
                                           Align(
                                               alignment: Alignment.topRight,
                                               child: PopupMenuButton(
-                                                color: Colors.white ,
+                                                color: Colors.white,
                                                 elevation: 20,
-                                                icon:
-                                                    const Icon(Icons.more_vert,color: Colors.black,),
+                                                icon: const Icon(
+                                                  Icons.more_vert,
+                                                  color: Colors.black,
+                                                ),
                                                 onSelected: (value) {
                                                   if (value == 'edit') {
                                                     setState(() {
@@ -222,7 +214,7 @@ class _UpcominglistState extends State<Upcominglist> {
                                                                           deletetripdetails(
                                                                               data.id!);
                                                                           Navigator.of(context)
-                                                                              .pushReplacement(MaterialPageRoute(builder: (ctx) =>  Home()));
+                                                                              .pushReplacement(MaterialPageRoute(builder: (ctx) => Home()));
                                                                         });
                                                                       },
                                                                       child:
@@ -259,7 +251,8 @@ class _UpcominglistState extends State<Upcominglist> {
                                                         ))
                                                   ];
                                                 },
-                                              )),
+                                              )
+                                              ),
                                         ],
                                       )
                                     ],
@@ -268,8 +261,9 @@ class _UpcominglistState extends State<Upcominglist> {
                                     height: MediaQuery.of(context).size.height *
                                         0.01,
                                   ),
+                                
                                   Text(
-                                    data.startdate,
+                                  data.startdate,
                                     style: const TextStyle(fontSize: 16),
                                   ),
                                   if (isExpandedList[index])
@@ -298,7 +292,7 @@ class _UpcominglistState extends State<Upcominglist> {
                                               0.02,
                                         ),
                                         Text(
-                                          'Ending Date            :     ${ data.enddate}',
+                                          'Ending Date            :     ${data.enddate}',
                                           style: const TextStyle(fontSize: 20),
                                         ),
                                         SizedBox(
@@ -352,7 +346,7 @@ class _UpcominglistState extends State<Upcominglist> {
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>  Home()),
+          MaterialPageRoute(builder: (context) => Home()),
         );
         break;
       case 1:
@@ -367,42 +361,11 @@ class _UpcominglistState extends State<Upcominglist> {
     }
   }
 
+  Future<void> addfavoritetodb(data, index) async {
+    final tripplandb = await Hive.openBox<Plandetails>('trip_plan_db');
+    var trip = tripplandb.values.firstWhere((element) => element.id == data.id);
+    trip.favorite = !trip.favorite;
+    tripplandb.put(data.id, trip);
 
-
-  Future<void>addfavoritetodb(data, index) async {
-     final tripplandb=await Hive.openBox<Plandetails>('trip_plan_db');
-    var trip=  tripplandb.values.firstWhere((element) => element.id==data.id);
-     trip.favorite=!trip.favorite;
-     tripplandb.put(data.id, trip);
-     
-
-  
-    // final addfavoriteDb = await Hive.openBox<Favoritemodel>('Dbaddfavorites');
-
-    // if (!addfavoriteDb.values.any((element) => element.number == data.number)) {
-    //   final add = Favoritemodel(
-    //     uniqeusername: check[sighnindata].username,
-    //       id: data.id,
-    //       place: data.place,
-    //       startdate: data.startdate,
-    //       enddate: data.enddate,
-    //       expectedamount: data.expectedamount,
-    //       number: data.number);
-
-    //   await  addFavorite(add, check[sighnindata].username);
-
-    //   setState(() {
-    //     dbtripplan[index].favorite = true;
-    //   });
-    // } else {
-    //   final datas =
-    //       addfavoriteDb.values.firstWhere((item) => item.number == data.number);
-
-    //   await deleteFavorite(datas.id!,check[sighnindata].username);
-
-    //   setState(() {
-    //     dbtripplan[index].favorite = false;
-    //   });
-    // }
   }
 }

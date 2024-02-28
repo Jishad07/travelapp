@@ -45,7 +45,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           style: TextStyle(color: Color(0xFF05999E)),
         ),
       ),
-      drawer: const Drawerscreen(),
+      drawer:  Drawerscreen(
+        didchangefav: (){
+          print("didchange fav working");
+          setState(() {
+            
+          });
+        },
+      ),
       body: Column(
         children: [
           CarouselSlider(

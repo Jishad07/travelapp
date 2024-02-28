@@ -12,6 +12,7 @@ import 'package:travel_app/screen/homepage/home.dart';
 import 'package:travel_app/screen/loginpage/login_page.dart';
 
 class Expence extends StatefulWidget {
+ 
    Expence({required this.plandetailsdata,super.key});
    Plandetails plandetailsdata;
    var tripid;
@@ -46,6 +47,7 @@ class _ExpenceState extends State<Expence> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -77,7 +79,9 @@ class _ExpenceState extends State<Expence> {
                       child: InkWell(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) =>  Expensedetails(plandetailsdata: widget.plandetailsdata,)));
+                              builder: (ctx) =>  Expensedetails(plandetailsdata: widget.plandetailsdata,didpopexpensedetails: (){
+                                gettotal();
+                              },)));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -110,7 +114,9 @@ class _ExpenceState extends State<Expence> {
                   child: InkWell(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) =>  Expensedetails(plandetailsdata: widget.plandetailsdata,)));
+                          builder: (ctx) =>  Expensedetails(plandetailsdata: widget.plandetailsdata,didpopexpensedetails: (){
+                            gettotal();
+                          },)));
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -219,8 +225,12 @@ class _ExpenceState extends State<Expence> {
                                   },
                                   child: const Text("Cancel")),
                               TextButton(
-                                  onPressed: () {
-                                    expensechecking(widget.tripid);
+                                  onPressed: () async
+                                  {
+
+                                   expensechecking(widget.tripid);
+                                   print("ajith");
+                                  
                                   },
                                   child: const Text('Add'))
                             ],
@@ -270,7 +280,7 @@ class _ExpenceState extends State<Expence> {
   }
 
   String dateFormat(DateTime date) {
-    return DateFormat('dd-MM-yyyy').format(date);
+    return DateFormat('dd-MMM-yyyy').format(date);
   }
 
   void expensechecking(tripid) async {
@@ -289,10 +299,16 @@ class _ExpenceState extends State<Expence> {
       await addexpense(expense);
       gettotal();
   
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (ctx) =>  Expensedetails(plandetailsdata: widget.plandetailsdata,)));
+      if (mounted){
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (ctx) =>  Expensedetails(plandetailsdata: widget.plandetailsdata,didpopexpensedetails: (){
+              gettotal();
+            },)));
+          
+
+       
       }
+      return ;
     }
   }
 

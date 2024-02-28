@@ -24,7 +24,7 @@ import 'model/model.dart';
 //  List expenselist=[];
  List sortedlist=[];
 
- List addfavoritelist=[];
+//  List addfavoritelist=[];
  List nowtrip=[];
 // List<Expensemodel>sortlist=[];
 
@@ -118,11 +118,7 @@ Future<List<Plandetails>> gettripdetails()async{
        gettripdetails();
      
   }
-  // add members to db
-  // Future <void>addmembers()async{
-  //   final membersdb=await Hive.openBox<Plandetails>('membersdb');
-  //   final members=await membersdb.add();
-  // }
+ 
 
  Future<void>addexpense(Expensemodel value)async{
   final expenseDb=await Hive.openBox<Expensemodel>('expens_Db');
@@ -139,6 +135,18 @@ Future<List<Plandetails>> gettripdetails()async{
     return box.values.where((element) => element.tripid==planid).toList();
     //  return box.values.toList();
  }
+ 
+      Future<void>deleteExpense(int id)async{
+    final box=await Hive.openBox<Expensemodel>('expens_Db');
+     await box.delete(id);
+
+  }
+
+    Future<void>editexpensedb(Expensemodel expensemodel)async{
+     final box=await Hive.openBox<Expensemodel>('expens_Db');
+       await box.put(expensemodel.id,expensemodel);
+       return ;
+  }
 
  Future<int>addtripicture(Tripphotosmodel value)async{
   final addimagesDb=await Hive.openBox<Tripphotosmodel>('addimages_Db');
@@ -165,17 +173,19 @@ Future<void> addFavorite(Favoritemodel value, String userId) async {
   await getAllFavorites(userId); // Pass userId to fetch user-specific favorites
 }
 
-Future<void> deleteFavorite(int id, String userId) async {
-  final addfavoriteDb = await Hive.openBox<Favoritemodel>("Dbaddfavorites");
-  await addfavoriteDb.delete(id);
-  await getAllFavorites(userId); // Pass userId to fetch user-specific favorites
+Future<void> deleteFavorite(Plandetails plandetails,) async {
+  final tripplandb=await Hive.openBox<Plandetails>('trip_plan_db');
+  plandetails.favorite=false;
+  await tripplandb.put(plandetails.id, plandetails);
+  // await getAllFavorites(userId); // Pass userId to fetch user-specific favorites
 }
 
-Future<void> getAllFavorites(String userId) async {
+Future<List<Plandetails>> getAllFavorites(String userId) async {
   final tripplandb=await Hive.openBox<Plandetails>('trip_plan_db');
   // final addfavoriteDb = await Hive.openBox<Favoritemodel>("Dbaddfavorites");
   List<Plandetails> filteredFavorites = tripplandb.values.where((trip) => trip.uniqeusername == userId&&trip.favorite).toList();
-  addfavoritelist = filteredFavorites;
+  // addfavoritelist = filteredFavorites;.
+  return filteredFavorites ;
 }
 
 Future<void>addcompanions(CompanionModel value)async{
@@ -194,37 +204,6 @@ Future<void>addcompanions(CompanionModel value)async{
 
   }
 
-
-//  Future<void>addfavorites(Favoritemodel value)async{
-//   print('add favorite db okke');
-//   final addfavoriteDb=await Hive.openBox<Favoritemodel>('Dbaddfavorites');
-//  final id1 =await addfavoriteDb.add(value);
-//   value.id=id1;
-//     await addfavoriteDb.put(id1, value);
-//      await getallfavorite();
-
-//   //  return filteredfavorites;
-//   }
-
-
-
-
-
-
-//  Future<void>deletefavoritedb(int id)async{
-//   final addfavoriteDb=await Hive.openBox<Favoritemodel>("Dbaddfavorites");
-//     await addfavoriteDb.delete(id);
-//    await getallfavorite();
-
-//  }
-//   Future<void>getallfavorite()async{
-//    final  addfavoriteDb=await Hive.openBox<Favoritemodel>("Dbaddfavorites");
-//      String faveritedInUsername = check[sighnindata].username;
-//    List<Favoritemodel> filteredfavorites =addfavoriteDb.values.where((trip) => trip.uniqeusername == faveritedInUsername).toList();
-//     addfavoritelist.clear();
-//     addfavoritelist=filteredfavorites;
-//   }
-
  
 
     bool isToday(DateTime date) {
@@ -240,12 +219,12 @@ Future<void>addcompanions(CompanionModel value)async{
 
 List<Plandetails> filterTodayTrips(List<Plandetails> trips) {
    DateTime now = DateTime.now();
-  String nowdate = DateFormat('dd-MM-yyyy').format(now);
+  String nowdate = DateFormat('dd-MMM-yyyy').format(now);
 
   List<Plandetails> todayTrips = trips.where((trip) {
-    DateTime tripStartDate = DateFormat('dd-MM-yyyy').parse(trip.startdate);
-    DateTime tripEndDate = DateFormat('dd-MM-yyyy').parse(trip.enddate);
-    DateTime nowDate = DateFormat('dd-MM-yyyy').parse(nowdate);
+    DateTime tripStartDate = DateFormat('dd-MMM-yyyy').parse(trip.startdate);
+    DateTime tripEndDate = DateFormat('dd-MMM-yyyy').parse(trip.enddate);
+    DateTime nowDate = DateFormat('dd-MMM-yyyy').parse(nowdate);
     return tripStartDate.isBefore(nowDate.add(const Duration(days: 1))) &&tripEndDate.isAfter(nowDate);
   }).toList();
 
@@ -255,11 +234,11 @@ List<Plandetails> filterTodayTrips(List<Plandetails> trips) {
 
 List<Plandetails> filterAchivedTrips(List<Plandetails> trips) {
   DateTime now = DateTime.now();
-  String nowdate = DateFormat('dd-MM-yyyy').format(now);
+  String nowdate = DateFormat('dd-MMM-yyyy').format(now);
 
   List<Plandetails> todayTrips = trips.where((trip) {
-    DateTime tripEndDate = DateFormat('dd-MM-yyyy').parse(trip.enddate);
-    DateTime nowDate = DateFormat('dd-MM-yyyy').parse(nowdate);
+    DateTime tripEndDate = DateFormat('dd-MMM-yyyy').parse(trip.enddate);
+    DateTime nowDate = DateFormat('dd-MMM-yyyy').parse(nowdate);
     return tripEndDate.isBefore(nowDate);
   }).toList();
 
@@ -268,11 +247,11 @@ List<Plandetails> filterAchivedTrips(List<Plandetails> trips) {
 
 List<Plandetails> filterTripsUpcomings(List<Plandetails> trips) {
  DateTime now = DateTime.now();
-  String nowdate = DateFormat('dd-MM-yyyy').format(now);
+  String nowdate = DateFormat('dd-MMM-yyyy').format(now);
 
   List<Plandetails> todayTrips = trips.where((trip) {
-    DateTime tripStartDate = DateFormat('dd-MM-yyyy').parse(trip.startdate);
-    DateTime nowDate = DateFormat('dd-MM-yyyy').parse(nowdate);
+    DateTime tripStartDate = DateFormat('dd-MMM-yyyy').parse(trip.startdate);
+    DateTime nowDate = DateFormat('dd-MMM-yyyy').parse(nowdate);
     return tripStartDate.isAfter(nowDate);
   }).toList();
 
@@ -309,7 +288,6 @@ Future<List<IteryModel>> gettiteryes(int tripid,int day)async{
     }
 
        Future<void>deleteiteryes(int id)async{
-        print("tripid=${id}");
         final box=await Hive.openBox<IteryModel>('itery_Db');
         await box.delete(id);
         

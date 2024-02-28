@@ -32,9 +32,9 @@ class _UpcomingState extends State<Upcoming> {
   DateTime selectedstartingDate = DateTime.now();
   DateTime selectedendingDate = DateTime.now();
   TextEditingController placecontroller = TextEditingController();
-TextEditingController startdatecontroller = TextEditingController();
-TextEditingController enddatecontroller = TextEditingController();
-TextEditingController expectamountcontroller = TextEditingController();
+  TextEditingController startdatecontroller = TextEditingController();
+  TextEditingController enddatecontroller = TextEditingController();
+  TextEditingController expectamountcontroller = TextEditingController();
   GlobalKeyManager globalKeyManager = GlobalKeyManager();
   List<CompanionModel>companionlist=[];
  String type="Solo";
@@ -57,7 +57,7 @@ TextEditingController expectamountcontroller = TextEditingController();
         backgroundColor: const Color(0xFF05999E),
         centerTitle: true,
       ),
-      drawer: const Drawerscreen(),
+      drawer:  Drawerscreen(),
       body: Column(
         children: [
           Container(
@@ -288,48 +288,116 @@ TextEditingController expectamountcontroller = TextEditingController();
       }
     }
   }
+  
+    Future<void> planCheck() async {
+  final place = placecontroller.text.trim();
+  final startingdate = startdatecontroller.text.trim();
+  final endingdate = enddatecontroller.text.trim();
+  final expectedamount = expectamountcontroller.text.trim();
 
-  Future<void> planCheck() async {
-    final place = placecontroller.text.trim();
-    final startingdate = startdatecontroller.text.trim();
-    final endingdate = enddatecontroller.text.trim();
-    final expectedamount = expectamountcontroller.text.trim();
-     
-      //  final List<Plandetails> existingTrips = await getAllTripsFromDatabase();
+  // Get all existing trips from the database
+  final List<Plandetails> existingTrips = await gettripdetails();
 
-        // bool isDateAvailable = checkDateAvailability(
-      // startingdate, endingdate, existingTrips);
+  // Check for date overlap
+  bool isDateAvailable = checkDateAvailability(
+      startingdate, endingdate, existingTrips);
 
+  if (isDateAvailable==true) {
     if (globalKeyManager.validation.currentState!.validate()) {
       final tripplan = Plandetails(
-         triptype: type,
-          uniqeusername: check[sighnindata].username,
-          place: place,
-          startdate: startingdate,
-          enddate: endingdate,
-          expectedamount: expectedamount,
-         ); 
-         
-    
-      
-     int tripid= await  tripplandetails(tripplan);
-     
-      for(int i=0;i<companionlist.length;i++){
-        CompanionModel companionModel=companionlist[i];
-        companionModel.tripid=tripid;
-       addcompanions(companionModel);
+        triptype: type,
+        uniqeusername: check[sighnindata].username,
+        place: place,
+        startdate: startingdate,
+        enddate: endingdate,
+        expectedamount: expectedamount,
+      );
+
+      int tripid = await tripplandetails(tripplan);
+
+      for (int i = 0; i < companionlist.length; i++) {
+        CompanionModel companionModel = companionlist[i];
+        companionModel.tripid = tripid;
+        addcompanions(companionModel);
       }
-     
+
       if (mounted) {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (ctx) =>  const Home()));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (ctx) => const Home()));
         placecontroller.clear();
         startdatecontroller.clear();
         enddatecontroller.clear();
         expectamountcontroller.clear();
       }
     }
+  } else {
+    // Show a message indicating that the selected dates are not available
+    snackbar('Selected dates overlap with existing trips. Please choose different dates.');
   }
+}
+
+// Function to check if selected dates overlap with existing trips
+bool checkDateAvailability(String startDate, String endDate, List<Plandetails> existingTrips) {
+  DateTime newStartDate = DateFormat('dd-MMM-yyyy').parse(startDate);
+  DateTime newEndDate = DateFormat('dd-MMM-yyyy').parse(endDate);
+  // print("startdate =${startDate}");
+  // print("new startdate=${newStartDate}");
+  // print("startdate =${endDate}");
+  //   print("new enddate=${newEndDate}");
+  for (Plandetails trip in existingTrips) {
+    DateTime tripStartDate = DateFormat('dd-MMM-yyyy').parse(trip.startdate);
+    DateTime tripEndDate = DateFormat('dd-MMM-yyyy').parse(trip.enddate);
+
+    if ((newStartDate.isAfter(tripStartDate) && newStartDate.isBefore(tripEndDate)) ||
+        (newEndDate.isAfter(tripStartDate) && newEndDate.isBefore(tripEndDate)) ||
+        (newStartDate.isBefore(tripStartDate) && newEndDate.isAfter(tripEndDate))) {
+      // Dates overlap
+      return false;
+    }
+  }
+
+  // No overlap found
+  return true;
+}
+
+   
+  // Future<void> planCheck() async {
+  //   final place = placecontroller.text.trim();
+  //   final startingdate = startdatecontroller.text.trim();
+  //   final endingdate = enddatecontroller.text.trim();
+  //   final expectedamount = expectamountcontroller.text.trim();
+  
+
+  //   if (globalKeyManager.validation.currentState!.validate()) {
+  //     final tripplan = Plandetails(
+  //        triptype: type,
+  //         uniqeusername: check[sighnindata].username,
+  //         place: place,
+  //         startdate: startingdate,
+  //         enddate: endingdate,
+  //         expectedamount: expectedamount,
+  //        ); 
+         
+    
+      
+  //    int tripid= await  tripplandetails(tripplan);
+     
+  //     for(int i=0;i<companionlist.length;i++){
+  //       CompanionModel companionModel=companionlist[i];
+  //       companionModel.tripid=tripid;
+  //      addcompanions(companionModel);
+  //     }
+     
+  //     if (mounted) {
+  //       Navigator.of(context)
+  //           .push(MaterialPageRoute(builder: (ctx) =>  const Home()));
+  //       placecontroller.clear();
+  //       startdatecontroller.clear();
+  //       enddatecontroller.clear();
+  //       expectamountcontroller.clear();
+  //     }
+  //   }
+  // }
 
   Future<void> editCheck() async {
     final place = placecontroller.text.trim();
@@ -360,7 +428,7 @@ TextEditingController expectamountcontroller = TextEditingController();
   }
 
   String dateFormat(DateTime date) {
-    return DateFormat('dd-MM-yyyy').format(date);
+    return DateFormat('dd-MMM-yyyy').format(date);
   }
 
   Future<void> getTripDetails() async {

@@ -361,10 +361,10 @@ class _Nowtrip extends State<Nowpage> {
         dbtripplan[index].favorite = true;
       });
     } else {
-      final datas =
-          addfavoriteDb.values.firstWhere((item) => item.number == data.number);
+      // final datas =
+      //     addfavoriteDb.values.firstWhere((item) => item.number == data.number);
 
-      await deleteFavorite(datas.id!,check[sighnindata].username);
+      // await deleteFavorite(datas);
 
       setState(() {
         dbtripplan[index].favorite = false;

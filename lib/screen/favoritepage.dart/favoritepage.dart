@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/db_functions.dart';
 import 'package:travel_app/model/favoritemodel.dart';
+import 'package:travel_app/model/tripplanmodel.dart';
 import 'package:travel_app/screen/homepage/home.dart';
 import 'package:travel_app/screen/loginpage/login_page.dart';
 import 'package:travel_app/screen/tripdetails/tripdetails.dart';
@@ -18,22 +19,28 @@ List<Favoritemodel> favoritedata = [];
 List<bool> isExpandedList = [];
 
 class _FavoritepageState extends State<Favoritepage> {
-  
+  List<Plandetails>addfavoritelist=[];
   @override
 
   void initState() {
-      String userId = check[sighnindata].username; // Implement this according to your authentication system
-     getAllFavorites(userId);
+     
     // List favoritedata = addfavoritelist;
-
+     getfavorites();
     super.initState();
+  }
+  void getfavorites()async{
+     String userId = check[sighnindata].username; // Implement this according to your authentication system
+     List<Plandetails> newList = await getAllFavorites(userId);
+     setState(() {
+       addfavoritelist=newList;
+     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Favorite"),
+          title:const  Text("Favorite"),
           centerTitle: true,
         ),
         body: Container(
@@ -78,6 +85,11 @@ class _FavoritepageState extends State<Favoritepage> {
                                       fontSize: 25,
                                     ),
                                   ),
+                                 IconButton(onPressed: ()async{
+                                 await deleteFavorite(addfavoritelist[index]);
+                                 getfavorites();
+                                 }, icon: const Icon(Icons.remove_circle_outline))
+                                
                                 ],
                               ),
                               SizedBox(
